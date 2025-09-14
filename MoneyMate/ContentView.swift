@@ -10,7 +10,7 @@ import SwiftUI
 struct ContentView: View {
     
     @State private var selectedTab: Tab = .dashboard
-    
+    @State private var showAddScreen = false
     var body: some View {
         
         ZStack(alignment: .bottom){
@@ -30,10 +30,35 @@ struct ContentView: View {
                     NavigationStack{SettingsView()}
                 }
             }.edgesIgnoringSafeArea(.all).background(Color(red: 246/255, green: 246/255, blue: 246/255))
-            
+            VStack {
+                            Spacer()
+                            HStack {
+                                Spacer()
+                                Button {
+                                    showAddScreen = true
+                                } label: {
+                                    Image(systemName: "plus")
+                                        .font(.system(size: 24, weight: .bold))
+                                        .frame(width: 60, height: 60)
+                                        .foregroundColor(.white)
+                                        .background(Color.blue)
+                                        .clipShape(Circle())
+                                        .shadow(color: .black.opacity(0.2), radius: 5, x: 0, y: 3)
+                                }.buttonStyle(PlainButtonStyle())
+                                .padding(.trailing, 24)
+                                .padding(.bottom, 80) // tabbar ke upar thoda gap
+                            }
+                        }
             CustomTabbar(selectedTab: $selectedTab)
            
            
+        }.sheet(isPresented: $showAddScreen){
+            NavigationStack{
+                Text("Add new Transaction")
+                    .font(.headline)
+                    .navigationTitle("Add")
+                    .navigationBarTitleDisplayMode(.inline)
+            }
         }
        
     }
