@@ -8,14 +8,31 @@
 import SwiftUI
 
 struct ContentView: View {
+    
+    @State private var selectedTab: Tab = .dashboard
+    
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, worlasasd!")
+        
+        ZStack(alignment: .bottom){
+            
+            // Content of selected tab
+            Group {
+                switch selectedTab {
+                case .dashboard:
+                    NavigationStack{DashboardView()}
+                case .transactions:
+                    NavigationStack{TransactionView()}
+                case .analytics:
+                    NavigationStack{AnalticsView()}
+                case .settings:
+                    NavigationStack{SettingsView()}
+                }
+            }.edgesIgnoringSafeArea(.all)
+            
+            CustomTabbar(selectedTab: $selectedTab).background(Color.white)
+            
         }
-        .padding()
+       
     }
 }
 

@@ -9,7 +9,7 @@
 import SwiftUI
 import Charts
 
-struct Dashboard: View{
+struct DashboardView: View{
     var body: some View{
         let fruits = ["Apple", "Banana", "Mango"]
         let sampleExpenses: [Expense] = [
@@ -77,5 +77,5 @@ struct Dashboard: View{
 
 
 #Preview {
-    Dashboard()
+    DashboardView()
 }
