@@ -25,7 +25,7 @@ struct ContentView: View {
                 case .transactions:
                     NavigationStack{TransactionView()}
                 case .analytics:
-                    NavigationStack{AnalticsView()}
+                    NavigationStack{AnalyticsView()}
                 case .settings:
                     NavigationStack{SettingsView()}
                 }

@@ -16,10 +16,6 @@ struct DashboardView: View{
     
     var body: some View{
         
-        
-        
-        
-        
         let fruits = ["Apple", "Banana", "Mango"]
         let sampleExpenses: [Expense] = [
             Expense(category: "Food", amount: 120),
