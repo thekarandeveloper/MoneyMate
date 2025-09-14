@@ -10,8 +10,10 @@ import SwiftUI
 struct TransactionView: View{
 
     var body: some View{
-        VStack{
-            Text("Transaction View")
-        }
+        VStack(alignment: .leading, spacing: 20){
+            // Navigation Bar
+            CustomNavigationBarView(selectedTab:.transactions)
+           
+        }.padding(20)
     }
 }

@@ -27,7 +27,7 @@ struct CustomTabbar: View {
            tabButton(.analytics, icon: "chart.bar.fill", title: "Analytics")
            Spacer()
            tabButton(.settings, icon: "gearshape.fill", title: "Settings")
-        }.padding()
+        }.padding().background(Color.white)
     }
     
     func tabButton(_ tab: Tab, icon:String, title:String) -> some View {

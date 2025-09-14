@@ -15,6 +15,8 @@ struct ContentView: View {
         
         ZStack(alignment: .bottom){
             
+            
+          
             // Content of selected tab
             Group {
                 switch selectedTab {
@@ -27,10 +29,11 @@ struct ContentView: View {
                 case .settings:
                     NavigationStack{SettingsView()}
                 }
-            }.edgesIgnoringSafeArea(.all)
+            }.edgesIgnoringSafeArea(.all).background(Color(red: 246/255, green: 246/255, blue: 246/255))
             
-            CustomTabbar(selectedTab: $selectedTab).background(Color.white)
-            
+            CustomTabbar(selectedTab: $selectedTab)
+           
+           
         }
        
     }

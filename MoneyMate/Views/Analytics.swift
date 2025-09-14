@@ -9,6 +9,10 @@ import SwiftUI
 
 struct AnalticsView: View{
     var body: some View{
-        Text("Analytics")
+        VStack(alignment: .leading, spacing: 20){
+            // Navigation Bar
+            CustomNavigationBarView(selectedTab:.analytics)
+           
+        }.padding(20)
     }
 }
