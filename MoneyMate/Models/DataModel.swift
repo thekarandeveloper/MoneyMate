@@ -13,3 +13,9 @@ struct Expense: Identifiable {
 }
 
 
+struct CategoryItem: Hashable {
+    let id = UUID()
+    let name: String
+    let iconName: String
+    let color: Color
+}

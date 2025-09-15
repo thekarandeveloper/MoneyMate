@@ -22,11 +22,11 @@ struct ContentView: View {
                 switch selectedTab {
                 case .dashboard:
                     NavigationStack{DashboardView()}
-                case .transactions:
-                    NavigationStack{TransactionView()}
                 case .analytics:
                     NavigationStack{AnalyticsView()}
                 case .settings:
+                    NavigationStack{SettingsView()}
+                case .goals:
                     NavigationStack{SettingsView()}
                 }
             }.edgesIgnoringSafeArea(.all).background(Color(red: 246/255, green: 246/255, blue: 246/255))
@@ -46,7 +46,7 @@ struct ContentView: View {
                                         .shadow(color: .black.opacity(0.2), radius: 5, x: 0, y: 3)
                                 }.buttonStyle(PlainButtonStyle())
                                 .padding(.trailing, 24)
-                                .padding(.bottom, 80) // tabbar ke upar thoda gap
+                                .padding(.bottom, 80) 
                             }
                         }
             CustomTabbar(selectedTab: $selectedTab)
@@ -54,10 +54,29 @@ struct ContentView: View {
            
         }.sheet(isPresented: $showAddScreen){
             NavigationStack{
-                Text("Add new Transaction")
-                    .font(.headline)
-                    .navigationTitle("Add")
+                NewEntryView()
+                    .navigationTitle("New Entry")
                     .navigationBarTitleDisplayMode(.inline)
+                    .toolbar{
+                        
+                        // Left Button
+                        
+                        ToolbarItem(placement: .cancellationAction){
+                            Button("Cancel"){
+                                showAddScreen = false
+                            }
+                        }
+                        
+                        
+                        // Right Button
+                        
+                        ToolbarItem(placement: .confirmationAction){
+                            Button("Save"){
+                                showAddScreen = false
+                            }
+                        }
+                        
+                    }
             }
         }
        

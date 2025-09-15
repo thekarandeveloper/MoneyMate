@@ -33,16 +33,17 @@ struct CustomNavigationBarView: View {
                     }
                 }
                 
-            case .transactions:
-                Text("Transactions")
-                    .font(.largeTitle)
-                    .fontWeight(.semibold)
+         
             case .settings:
                 Text("Settings")
                     .font(.largeTitle)
                     .fontWeight(.semibold)
             case .analytics:
                 Text("Analytics")
+                    .font(.largeTitle)
+                    .fontWeight(.semibold)
+            case .goals:
+                Text("Goals")
                     .font(.largeTitle)
                     .fontWeight(.semibold)
             }

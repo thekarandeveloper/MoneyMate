@@ -12,11 +12,17 @@ import Charts
 struct DashboardView: View{
     
     @State private var selected = 0
+    @State private var goToDetailAnlytics: Bool = false
     let durationOptions = ["Week", "Month"]
     
     var body: some View{
         
-        let fruits = ["Apple", "Banana", "Mango"]
+        let categories: [CategoryItem] = [
+            CategoryItem(name: "Food", iconName: "fork.knife", color: .red),
+            CategoryItem(name: "Travel", iconName: "car.fill", color: .blue),
+            CategoryItem(name: "Shopping", iconName: "bag.fill", color: .purple),
+            CategoryItem(name: "Bills", iconName: "doc.text.fill", color: .green)
+        ]
         let sampleExpenses: [Expense] = [
             Expense(category: "Food", amount: 120),
             Expense(category: "Travel", amount: 80),
@@ -70,27 +76,53 @@ struct DashboardView: View{
                     .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
                 
                 HStack(alignment: .center){
-                    Text("Recent Expenses").font(.title3).bold()
+                    Text("Recents").font(.title3).bold()
                     Spacer()
-                    Text("View All")
+                    
+                    Button{
+                        goToDetailAnlytics = true
+                    } label: {
+                        Text("View All")
+                            .foregroundColor(.blue)
+                    }
+                    
                 }
                 
-                ForEach(fruits, id:\.self){ fruit in
-                    HStack(alignment: .top){
-                        Image( "Mark").resizable().frame(width: 60, height: 60).clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
-                        VStack(alignment: .leading){
-                            Text("\(fruit.capitalized)").font(.title3).bold()
-                           
-                            Text("August 23, 2003").font(.caption)
-                            Spacer()
-                        }
-                        Spacer()
-                        HStack{
-                            Text("$123").font(.title3).bold()
-                            Image(systemName: "chevron.right")
+                ForEach(categories, id:\.self) { category in
+                    HStack(alignment: .center, spacing: 12) {
+                        
+                        // Icon with background
+                        ZStack {
+                            RoundedRectangle(cornerRadius: 12, style: .continuous)
+                                .fill(Color.white)
+                                .frame(width: 60, height: 60)
                             
+                            Image(systemName: category.iconName)
+                                .font(.system(size: 24))
+                                .foregroundColor(category.color)
                         }
-                    }.frame(height: 50)
+                        
+                        // Text info
+                        VStack(alignment: .leading, spacing: 4) {
+                            Text(category.name.capitalized)  // fixed typo ..capitalized
+                                .font(.title3)
+                                .bold()
+                            Text("August 23, 2003")
+                                .font(.caption)
+                        }
+                        
+                        Spacer()
+                        
+                        // Amount + chevron
+                        HStack(spacing: 4) {
+                            Text("$123")  // replace with category.amount if needed
+                                .font(.title3)
+                                .bold()
+                            Image(systemName: "chevron.right")
+                        }
+                    }
+                    .padding(.vertical, 8)
+                
                 }
                 
                 
@@ -100,8 +132,16 @@ struct DashboardView: View{
         }
         
         .padding(20)
+        .padding(.bottom, 50)
         .background(Color(red: 246/255, green: 246/255, blue: 246/255))
-            
+        
+        // Navigation Sheets
+        
+        .navigationDestination(isPresented: $goToDetailAnlytics){
+            TransactionView()
+                .navigationTitle("All Transactions")
+                .navigationBarTitleDisplayMode(.large)
+        }
        
     }
 }

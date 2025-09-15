@@ -9,7 +9,7 @@ import SwiftUI
 
 enum Tab{
     case dashboard
-    case transactions
+    case goals
     case analytics
     case settings
 }
@@ -21,10 +21,11 @@ struct CustomTabbar: View {
     var body: some View {
         HStack{
             tabButton(.dashboard, icon: "house.fill", title: "Home")
-           Spacer()
-           tabButton(.transactions, icon: "list.bullet", title: "Transactions")
-           Spacer()
+            Spacer()
+           
            tabButton(.analytics, icon: "chart.bar.fill", title: "Analytics")
+           Spacer()
+            tabButton(.goals, icon: "checkmark.seal.fill", title: "Goals")
            Spacer()
            tabButton(.settings, icon: "gearshape.fill", title: "Settings")
         }.padding().background(Color.white)

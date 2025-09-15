@@ -18,8 +18,7 @@ struct TransactionView: View{
     var body: some View{
         
         ScrollView(.vertical, showsIndicators: false){
-            // Navigation Bar
-            CustomNavigationBarView(selectedTab:.transactions)
+          
             
             Spacer().frame(height: 20)
             
