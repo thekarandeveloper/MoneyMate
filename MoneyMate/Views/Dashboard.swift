@@ -13,6 +13,7 @@ struct DashboardView: View{
     
     @State private var selected = 0
     @State private var goToDetailAnlytics: Bool = false
+    @State private var goToTransactionDetail:Bool = false
     let durationOptions = ["Week", "Month"]
     
     var body: some View{
@@ -89,40 +90,46 @@ struct DashboardView: View{
                 }
                 
                 ForEach(categories, id:\.self) { category in
-                    HStack(alignment: .center, spacing: 12) {
-                        
-                        // Icon with background
-                        ZStack {
-                            RoundedRectangle(cornerRadius: 12, style: .continuous)
-                                .fill(Color.white)
-                                .frame(width: 60, height: 60)
+                    
+                    Button{
+                        goToTransactionDetail = true
+                    } label: {
+                        HStack(alignment: .center, spacing: 12) {
                             
-                            Image(systemName: category.iconName)
-                                .font(.system(size: 24))
-                                .foregroundColor(category.color)
+                            // Icon with background
+                            ZStack {
+                                RoundedRectangle(cornerRadius: 12, style: .continuous)
+                                    .fill(Color.white)
+                                    .frame(width: 60, height: 60)
+                                
+                                Image(systemName: category.iconName)
+                                    .font(.system(size: 24))
+                                    .foregroundColor(category.color)
+                            }
+                            
+                            // Text info
+                            VStack(alignment: .leading, spacing: 4) {
+                                Text(category.name.capitalized)  // fixed typo ..capitalized
+                                    .font(.title3)
+                                    .bold()
+                                Text("August 23, 2003")
+                                    .font(.caption)
+                            }
+                            
+                            Spacer()
+                            
+                            // Amount + chevron
+                            HStack(spacing: 4) {
+                                Text("$123")  // replace with category.amount if needed
+                                    .font(.title3)
+                                    .bold()
+                            }
                         }
-                        
-                        // Text info
-                        VStack(alignment: .leading, spacing: 4) {
-                            Text(category.name.capitalized)  // fixed typo ..capitalized
-                                .font(.title3)
-                                .bold()
-                            Text("August 23, 2003")
-                                .font(.caption)
-                        }
-                        
-                        Spacer()
-                        
-                        // Amount + chevron
-                        HStack(spacing: 4) {
-                            Text("$123")  // replace with category.amount if needed
-                                .font(.title3)
-                                .bold()
-                            Image(systemName: "chevron.right")
-                        }
+                        .foregroundStyle(Color.black)
+                        .padding(.vertical, 8)
+                    
                     }
-                    .padding(.vertical, 8)
-                
+                   
                 }
                 
                 
@@ -141,6 +148,37 @@ struct DashboardView: View{
             TransactionView()
                 .navigationTitle("All Transactions")
                 .navigationBarTitleDisplayMode(.large)
+        }
+        .sheet(isPresented: $goToTransactionDetail){
+            
+            NavigationStack{
+                TransactionDetail()
+                    .navigationTitle("Transaction Detail")
+                    .navigationBarTitleDisplayMode(.inline)
+                    .toolbar{
+                        
+                        // Left Bar Iteam
+                        ToolbarItem(placement: .cancellationAction){
+                            Button("Cancel"){
+                                goToTransactionDetail = false
+                            }
+                        }
+                        
+                        
+                        // Right Bar Button
+                        
+                        ToolbarItem(placement: .confirmationAction) {
+                                           Button {
+                                              // SHare Logic
+                                           } label: {
+                                               Image(systemName: "square.and.arrow.up")
+                                           }
+                                       }
+                        
+                    }
+            }
+            
+           
         }
        
     }

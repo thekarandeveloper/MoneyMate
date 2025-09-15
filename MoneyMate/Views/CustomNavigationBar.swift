@@ -73,7 +73,7 @@ struct CustomNavigationBarView: View {
         }
         .navigationDestination(isPresented: $goToNotification) {
             NotificationView()
-                .navigationTitle("Analytics")
+                .navigationTitle("Notification View")
                 .navigationBarTitleDisplayMode(.inline)
         }
     }

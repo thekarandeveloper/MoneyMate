@@ -30,8 +30,6 @@ struct SettingsView: View{
                         Spacer()
                         HStack{
                             Text("$123").font(.title3).bold()
-                            Image(systemName: "chevron.right")
-                            
                         }
                     }.frame(height: 60)
                 }
