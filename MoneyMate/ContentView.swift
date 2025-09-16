@@ -6,11 +6,14 @@
 //
 
 import SwiftUI
-
+import SwiftData
 struct ContentView: View {
     
     @State private var selectedTab: Tab = .dashboard
     @State private var showAddScreen = false
+    @Environment(\.modelContext) private var context
+   
+    @Query(sort: \Category.name) var categories: [Category]
     var body: some View {
         
         ZStack(alignment: .bottom){
@@ -52,14 +55,47 @@ struct ContentView: View {
             CustomTabbar(selectedTab: $selectedTab)
            
            
-        }.sheet(isPresented: $showAddScreen){
+        }
+       
+        .sheet(isPresented: $showAddScreen){
             NavigationStack{
                 NewEntryView()
-                
+                    
             }
+        }.task {
+            
+            // Create Default Category
+            
+            seedDefaultCategory(context: context)
         }
        
     }
+}
+
+func seedDefaultCategory(context: ModelContext){
+    // Fetch Existing Categories
+    
+    let descriptor = FetchDescriptor<Category>() // fetch all Category
+    let existingCategories = (try? context.fetch(descriptor)) ?? []
+    
+    
+    let defaultCategories = [
+            Category(name: "Food", iconName: "fork.knife", colorHex: "#FF0000"),
+            Category(name: "Transport", iconName: "car.fill", colorHex: "#0000FF"),
+            Category(name: "Salary", iconName: "banknote.fill", colorHex: "#00FF00"),
+        ]
+    
+    for cat in defaultCategories {
+        print("Entered in function")
+        if !existingCategories.contains(where: {$0.name == cat.name}){
+            context.insert(cat)
+            print("Creating", cat.name)
+        }
+    }
+    
+    try? context.save()
+    
+    
 }
 
 #Preview {

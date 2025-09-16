@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-
+import SwiftData
 struct NewEntryView: View{
     @Environment(\.modelContext) private var context
     @Environment(\.dismiss) private var dismiss
@@ -14,8 +14,11 @@ struct NewEntryView: View{
     @State private var categorySelected = 0
     @State private var newTransactionAmount: Double = 0.0
     @FocusState private var isFocused: Bool
+    
+    @Query(sort: \Category.name, order: .forward) var categories:[Category] 
+    
     let entryType = ["expense", "income"]
-    let category = ["Rent", "Misc", "karan", "food", "transport", "salary"]
+    
     var body: some View{
         
         VStack(alignment: .center, spacing: 20){
@@ -44,9 +47,11 @@ struct NewEntryView: View{
             Divider()
                 .frame(width: 200)
             Picker("categorySelection", selection: $categorySelected){
-                ForEach(0..<category.count, id:\.self){
+              
+                ForEach(0..<categories.count, id:\.self){
                     index in
-                    Text(category[index])
+                 
+                    Text(categories[index].name)
                 }
             }
             
@@ -56,40 +61,44 @@ struct NewEntryView: View{
             
             
         }.padding(15)
+            .navigationTitle("New Entry")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar{
+                
+                // Left Button
+                
+                ToolbarItem(placement: .cancellationAction){
+                    Button("Cancel"){
+                       dismiss()
+                    }
+                }
+                
+                
+                // Right Button
+                
+                ToolbarItem(placement: .confirmationAction){
+                    Button("Save"){
+                        
+                        let newTx = Transaction(amount: newTransactionAmount,
+                                                type: entryType[entrySelected],
+                                                category: categories[categorySelected])
+                        
+                        context.insert(newTx)
+                        try? context.save()
+                        
+                        
+                        dismiss()
+                    }
+                }
+                
+            }
         .onAppear{
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1){
                 isFocused = true
+                print(categories)
             }
         }
-        .navigationTitle("New Entry")
-        .navigationBarTitleDisplayMode(.inline)
-        .toolbar{
-            
-            // Left Button
-            
-            ToolbarItem(placement: .cancellationAction){
-                Button("Cancel"){
-                   dismiss()
-                }
-            }
-            
-            
-            // Right Button
-            
-            ToolbarItem(placement: .confirmationAction){
-                Button("Save"){
-                    
-                    let newTx = Transaction(amount: newTransactionAmount, category: category[categorySelected], type: entryType[entrySelected])
-                    
-                    context.insert(newTx)
-                    try? context.save()
-                    
-                    
-                    dismiss()
-                }
-            }
-            
-        }
+        
         
        
         

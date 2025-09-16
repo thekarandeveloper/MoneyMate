@@ -28,12 +28,6 @@ struct DashboardView: View{
     
     var body: some View{
         
-        let categories: [CategoryItem] = [
-            CategoryItem(name: "Food", iconName: "fork.knife", color: .red),
-            CategoryItem(name: "Travel", iconName: "car.fill", color: .blue),
-            CategoryItem(name: "Shopping", iconName: "bag.fill", color: .purple),
-            CategoryItem(name: "Bills", iconName: "doc.text.fill", color: .green)
-        ]
         let sampleExpenses: [Expense] = [
             Expense(category: "Food", amount: 120),
             Expense(category: "Travel", amount: 80),
@@ -99,47 +93,8 @@ struct DashboardView: View{
                     
                 }
                 
-                ForEach(categories, id:\.self) { category in
-                    
-                    Button{
-                        goToTransactionDetail = true
-                    } label: {
-                        HStack(alignment: .center, spacing: 12) {
-                            
-                            // Icon with background
-                            ZStack {
-                                RoundedRectangle(cornerRadius: 12, style: .continuous)
-                                    .fill(Color.white)
-                                    .frame(width: 60, height: 60)
-                                
-                                Image(systemName: category.iconName)
-                                    .font(.system(size: 24))
-                                    .foregroundColor(category.color)
-                            }
-                            
-                            // Text info
-                            VStack(alignment: .leading, spacing: 4) {
-                                Text(category.name.capitalized)  // fixed typo ..capitalized
-                                    .font(.title3)
-                                    .bold()
-                                Text("August 23, 2003")
-                                    .font(.caption)
-                            }
-                            
-                            Spacer()
-                            
-                            // Amount + chevron
-                            HStack(spacing: 4) {
-                                Text("$123")  // replace with category.amount if needed
-                                    .font(.title3)
-                                    .bold()
-                            }
-                        }
-                        .foregroundStyle(Color.black)
-                        .padding(.vertical, 8)
-                    
-                    }
-                   
+                ForEach(transactions) { transaction in
+                    TransactionRow(transaction: transaction)
                 }
             }
         }
@@ -159,29 +114,7 @@ struct DashboardView: View{
             
             NavigationStack{
                 TransactionDetail()
-                    .navigationTitle("Transaction Detail")
-                    .navigationBarTitleDisplayMode(.inline)
-                    .toolbar{
-                        
-                        // Left Bar Iteam
-                        ToolbarItem(placement: .cancellationAction){
-                            Button("Cancel"){
-                                goToTransactionDetail = false
-                            }
-                        }
-                        
-                        
-                        // Right Bar Button
-                        
-                        ToolbarItem(placement: .confirmationAction) {
-                                           Button {
-                                              // SHare Logic
-                                           } label: {
-                                               Image(systemName: "square.and.arrow.up")
-                                           }
-                                       }
-                        
-                    }
+                    
             }
             
            
@@ -189,7 +122,61 @@ struct DashboardView: View{
        
     }
 }
+struct TransactionRow: View {
+    var transaction: Transaction
+    
+    var body: some View {
+        Button {
+            // action
+        } label: {
+            HStack(spacing: 12) {
+                CategoryIcon(transaction: transaction)
+                TransactionInfo(transaction: transaction)
+                Spacer()
+                TransactionAmount(amount: transaction.amount)
+            }
+            .padding(.vertical, 8)
+        }
+    }
+}
 
+struct CategoryIcon: View {
+    var transaction: Transaction
+    var body: some View {
+        ZStack {
+            RoundedRectangle(cornerRadius: 12)
+                .fill(Color.white)
+                .frame(width: 60, height: 60)
+            Image(systemName: transaction.category?.iconName ?? "bag.fill")
+                .font(.system(size: 24))
+                .foregroundColor(.black)
+        }
+    }
+}
+
+struct TransactionInfo: View {
+    var transaction: Transaction
+    var body: some View {
+        VStack(alignment: .leading, spacing: 4) {
+            Text(transaction.category?.name ?? "Uncategorized")
+                .font(.title3)
+                .bold()
+            Text(transaction.date.formatted(date: .abbreviated, time: .omitted))
+                .font(.caption)
+        }
+    }
+}
+
+struct TransactionAmount: View {
+    var amount: Double
+    var body: some View {
+        HStack(spacing: 4) {
+            Text("$\(amount, specifier: "%.2f")")
+                .font(.title3)
+                .bold()
+        }
+    }
+}
 
 #Preview {
     DashboardView()
