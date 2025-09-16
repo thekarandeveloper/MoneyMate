@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct TransactionDetail: View {
+    @Environment(\.dismiss) private var dismiss
+    
     var body: some View {
         Text("Transaction Detail")
         VStack{
@@ -18,8 +20,8 @@ struct TransactionDetail: View {
                 
                 // Left Bar Iteam
                 ToolbarItem(placement: .cancellationAction){
-                    Button("Cancel"){
-//                        goToTransactionDetail = false
+                    Button("Back"){
+                        dismiss()
                     }
                 }
                 

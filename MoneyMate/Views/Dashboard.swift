@@ -10,11 +10,13 @@ import SwiftUI
 import Charts
 import SwiftData
 
+
 struct DashboardView: View{
-    
     @State private var selected = 0
     @State private var goToDetailAnlytics: Bool = false
     @State private var goToTransactionDetail:Bool = false
+
+    
     let durationOptions = ["Week", "Month"]
     
     // Swift Data
@@ -113,20 +115,15 @@ struct DashboardView: View{
                     .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
                 
                 HStack(alignment: .center){
-                    Text("Recents").font(.title3).bold()
+                    Text("Transactions").font(.title3).bold()
                     Spacer()
                     
-                    Button{
-                        goToDetailAnlytics = true
-                    } label: {
-                        Text("View All")
-                            .foregroundColor(.blue)
-                    }
+                    
                     
                 }
                 
                 ForEach(transactions) { transaction in
-                    TransactionRow(transaction: transaction)
+                    TransactionRow(transaction: transaction, goToTransactionDetail: $goToTransactionDetail)
                 }
             }
         }
@@ -153,13 +150,17 @@ struct DashboardView: View{
         }
        
     }
+    
+    
+   
+    
 }
 struct TransactionRow: View {
     var transaction: Transaction
-    
+    @Binding var goToTransactionDetail: Bool
     var body: some View {
         Button {
-            // action
+            goToTransactionDetail = true
         } label: {
             HStack(spacing: 12) {
                 CategoryIcon(transaction: transaction)

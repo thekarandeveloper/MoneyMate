@@ -20,7 +20,7 @@ struct CustomTabbar: View {
     
     var body: some View {
         HStack{
-            tabButton(.dashboard, icon: "house.fill", title: "Home")
+            tabButton(.dashboard, icon: "house.fill", title: "Dashboard")
             Spacer()
            
            tabButton(.analytics, icon: "chart.bar.fill", title: "Analytics")
