@@ -6,13 +6,35 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		CD01481F2E79FF49007595FD /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = CD01481E2E79FF49007595FD /* GoogleService-Info.plist */; };
+		CDCFB40A2E79F607007914FC /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = CDCFB4092E79F607007914FC /* FirebaseAuth */; };
+		CDCFB40C2E79F607007914FC /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = CDCFB40B2E79F607007914FC /* FirebaseFirestore */; };
+		CDCFB5612E79FA70007914FC /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = CDCFB5602E79FA70007914FC /* GoogleSignIn */; };
+		CDCFB5632E79FA70007914FC /* GoogleSignInSwift in Frameworks */ = {isa = PBXBuildFile; productRef = CDCFB5622E79FA70007914FC /* GoogleSignInSwift */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
+		CD01481E2E79FF49007595FD /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		CD753B9C2E769D2D00413C15 /* MoneyMate.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MoneyMate.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		CD0148212E7A0068007595FD /* Exceptions for "MoneyMate" folder in "MoneyMate" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = CD753B9B2E769D2D00413C15 /* MoneyMate */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		CD753B9E2E769D2D00413C15 /* MoneyMate */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				CD0148212E7A0068007595FD /* Exceptions for "MoneyMate" folder in "MoneyMate" target */,
+			);
 			path = MoneyMate;
 			sourceTree = "<group>";
 		};
@@ -23,6 +45,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CDCFB40A2E79F607007914FC /* FirebaseAuth in Frameworks */,
+				CDCFB40C2E79F607007914FC /* FirebaseFirestore in Frameworks */,
+				CDCFB5612E79FA70007914FC /* GoogleSignIn in Frameworks */,
+				CDCFB5632E79FA70007914FC /* GoogleSignInSwift in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -32,6 +58,7 @@
 		CD753B932E769D2D00413C15 = {
 			isa = PBXGroup;
 			children = (
+				CD01481E2E79FF49007595FD /* GoogleService-Info.plist */,
 				CD753B9E2E769D2D00413C15 /* MoneyMate */,
 				CD753B9D2E769D2D00413C15 /* Products */,
 			);
@@ -65,6 +92,10 @@
 			);
 			name = MoneyMate;
 			packageProductDependencies = (
+				CDCFB4092E79F607007914FC /* FirebaseAuth */,
+				CDCFB40B2E79F607007914FC /* FirebaseFirestore */,
+				CDCFB5602E79FA70007914FC /* GoogleSignIn */,
+				CDCFB5622E79FA70007914FC /* GoogleSignInSwift */,
 			);
 			productName = MoneyMate;
 			productReference = CD753B9C2E769D2D00413C15 /* MoneyMate.app */;
@@ -94,6 +125,10 @@
 			);
 			mainGroup = CD753B932E769D2D00413C15;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				CDCFB4082E79F607007914FC /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				CDCFB55F2E79FA70007914FC /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = CD753B9D2E769D2D00413C15 /* Products */;
 			projectDirPath = "";
@@ -109,6 +144,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CD01481F2E79FF49007595FD /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -256,6 +292,7 @@
 				DEVELOPMENT_TEAM = BA5S8NQVUG;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = MoneyMate/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -266,7 +303,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = rachna.MoneyMate;
+				PRODUCT_BUNDLE_IDENTIFIER = rachna.moneymate;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -284,6 +321,7 @@
 				DEVELOPMENT_TEAM = BA5S8NQVUG;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = MoneyMate/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -294,7 +332,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = rachna.MoneyMate;
+				PRODUCT_BUNDLE_IDENTIFIER = rachna.moneymate;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -324,6 +362,48 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		CDCFB4082E79F607007914FC /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 12.3.0;
+			};
+		};
+		CDCFB55F2E79FA70007914FC /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/google/GoogleSignIn-iOS";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 7.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		CDCFB4092E79F607007914FC /* FirebaseAuth */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = CDCFB4082E79F607007914FC /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAuth;
+		};
+		CDCFB40B2E79F607007914FC /* FirebaseFirestore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = CDCFB4082E79F607007914FC /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseFirestore;
+		};
+		CDCFB5602E79FA70007914FC /* GoogleSignIn */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = CDCFB55F2E79FA70007914FC /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */;
+			productName = GoogleSignIn;
+		};
+		CDCFB5622E79FA70007914FC /* GoogleSignInSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = CDCFB55F2E79FA70007914FC /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */;
+			productName = GoogleSignInSwift;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = CD753B942E769D2D00413C15 /* Project object */;
 }
