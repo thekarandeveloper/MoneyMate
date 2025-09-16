@@ -68,8 +68,13 @@ struct CustomNavigationBarView: View {
         
         // Attach Screens
         .sheet(isPresented: $goToProfile){
-            ProfileView()
-                .presentationDragIndicator(.visible)
+            
+            NavigationStack{
+                
+                ProfileView()
+                    .presentationDragIndicator(.visible)
+            }
+         
         }
         .navigationDestination(isPresented: $goToNotification) {
             NotificationView()

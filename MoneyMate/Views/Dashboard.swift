@@ -76,7 +76,8 @@ struct DashboardView: View{
                 VStack{
                     Text("Wallet Balance")
                         .font(.callout)
-                    Text("$\(totalBalance, specifier: "%.2f")").font(.system(size: 55, weight: .bold, design: .default))
+                    Text("$\(totalBalance, specifier: "%.2f")")
+                        .font(.system(size: 55, weight: .bold, design: .default))
                     Text("Last Updated 2 hours ago").font(.caption)
                 }.frame(maxWidth: .infinity).padding(20)
              

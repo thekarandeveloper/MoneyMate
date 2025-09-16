@@ -26,13 +26,13 @@ struct TransactionDetail: View {
                             .font(.system(size: 30, weight: .bold))
                             .foregroundColor(.pink)
                     )
-                Text("\(transaction.amount)")
+                Text("\(transaction.amount, specifier:"%.2f")")
                     .font(.system(size: 60, weight: .bold))
                 
                 Divider().frame(maxWidth:200)
              
                 Text("\(transaction.date.formatted(date: .abbreviated, time: .shortened))")
-                    .font(.system(size: 20, weight: .regular))
+                    .font(.system(size: 16, weight: .regular))
                 
                 Spacer().frame(maxHeight: 40)
                 
@@ -64,9 +64,15 @@ struct TransactionDetail: View {
                             .font(.subheadline)
                             .foregroundColor(.gray)
                         Spacer()
-                        
-                        Text("\(transaction.category)")
-                            .font(.subheadline)
+                        if let category = transaction.category?.name {
+                            Text(category)
+                                .font(.subheadline)
+                        } else {
+                            Text("Uncategorized")
+                                .font(.subheadline)
+                                .foregroundColor(.gray)
+                        }
+                       
                     }
 
                     Divider()
@@ -83,15 +89,25 @@ struct TransactionDetail: View {
                     }
 
                     Divider()
-
                     HStack {
-                        Text("Date")
+                        Text("Modified Date")
                             .font(.subheadline)
                             .foregroundColor(.gray)
                         Spacer()
-                        Text("\(transaction.amount)")
+                        
+                        Text("\(transaction.date.formatted(date: .abbreviated, time: .omitted))")
                             .font(.subheadline)
                     }
+                    Divider()
+                    HStack {
+                        Text("Created Date")
+                            .font(.subheadline)
+                            .foregroundColor(.gray)
+                        Spacer()
+                        Text("\(transaction.date.formatted(date: .abbreviated, time: .omitted))")
+                            .font(.subheadline)
+                    }
+                 
                 }
                 .padding()
                 .background(Color.white)
