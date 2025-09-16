@@ -20,20 +20,50 @@ struct DashboardView: View{
     // Swift Data
     @Query(sort: \Transaction.date, order: .reverse) var transactions: [Transaction]
     
-    var totalBalance: Double {
-        let income = transactions.filter{$0.type == "income"}.map(\.amount).reduce(0,+)
-        let expense = transactions.filter{$0.type == "expense"}.map(\.amount).reduce(0,+)
-        return income - expense
-    }
+    @Query(sort:\Category.name, order: .forward) var categories: [Category]
+   
     
     var body: some View{
         
-        let sampleExpenses: [Expense] = [
-            Expense(category: "Food", amount: 120),
-            Expense(category: "Travel", amount: 80),
-            Expense(category: "Shopping", amount: 200),
-            Expense(category: "Bills", amount: 60)
-        ]
+        // Total Balance
+        
+        var totalBalance: Double {
+            let income = transactions.filter{$0.type == "income"}.map(\.amount).reduce(0,+)
+            let expense = transactions.filter{$0.type == "expense"}.map(\.amount).reduce(0,+)
+            return income - expense
+        }
+        
+        // Category
+        
+        /// FILTER TRANSACTION ACC. TO DATE
+        var filterTransactions: [Transaction] {
+            let now = Date()
+            
+            
+            switch selected {
+            case 0:
+                let weekAgo = Calendar.current.date(byAdding: .day, value: -7, to: now)!
+                return transactions.filter{$0.date >= weekAgo}
+            case 1:
+                let monthAgo = Calendar.current.date(byAdding: .month, value: -1, to: now)!
+                       return transactions.filter { $0.date >= monthAgo }
+            default:
+                return transactions
+            }
+            
+        }
+        
+        // CATEGORIZED FILTERED TRANSACTIONS
+        let categoryTotals: [(category: Category, total: Double)] = categories.map {category in
+        
+            let totalAmount = category.transactions.filter{filterTransactions.contains($0) && $0.type == "expense"}
+                
+                .map(\.amount).reduce(0,+)
+            return (category, totalAmount)
+            
+        }
+        
+       
         
         ScrollView(.vertical,showsIndicators: false){
             VStack(alignment: .leading, spacing: 20){
@@ -56,7 +86,7 @@ struct DashboardView: View{
                 VStack(spacing: 20){
                     
                     HStack{
-                        Text("Activity").font(.headline)
+                        Text("Expense Activity").font(.headline)
                         Spacer()
                         Picker("Options", selection: $selected){
                             ForEach(0..<durationOptions.count, id:\.self){ index in
@@ -70,11 +100,13 @@ struct DashboardView: View{
                     }
                     
                     
-                    Chart(sampleExpenses){ expense in
+                    Chart(categoryTotals, id: \.category.id) { item in
                         BarMark(
-                            x: .value("Category", expense.category),
-                            y: .value("Amount", expense.amount),
-                        ).foregroundStyle(LinearGradient(colors: [.blue, .purple], startPoint: .top, endPoint: .bottom)).cornerRadius(10)
+                            x: .value("Category", item.category.name),
+                            y: .value("Amount", item.total)
+                        )
+                        .foregroundStyle(LinearGradient(colors: [.blue, .purple], startPoint: .top, endPoint: .bottom))
+                        .cornerRadius(10)
                     }.frame(height: 250)
                 }.frame(maxWidth: .infinity, maxHeight: 350).padding(20)
                     .background(Color.white)

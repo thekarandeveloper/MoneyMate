@@ -32,7 +32,7 @@ class Transaction: Identifiable, Hashable{
 }
 
 @Model
-class Category {
+class Category: Identifiable {
     @Attribute(.unique) var id: UUID
     var name: String
     var iconName: String

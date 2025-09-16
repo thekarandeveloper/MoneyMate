@@ -12,7 +12,7 @@ struct NewEntryView: View{
     @Environment(\.dismiss) private var dismiss
     @State private var entrySelected = 0
     @State private var categorySelected = 0
-    @State private var newTransactionAmount: Double = 0.0
+    @State private var newTransactionAmount: String = ""
     @FocusState private var isFocused: Bool
     
     @Query(sort: \Category.name, order: .forward) var categories:[Category] 
@@ -28,14 +28,14 @@ struct NewEntryView: View{
             Picker("selection", selection: $entrySelected){
                 ForEach(0..<entryType.count, id:\.self){ index in
                     
-                    Text(entryType[index])
+                    Text(entryType[index].capitalized)
                     
                 }
             }.pickerStyle(.segmented)
             Spacer().frame(maxHeight: 20)
             HStack(alignment: .center, spacing: 0){
                 Text("$").font(.system(size: 60, weight: .bold))
-                TextField("0.0", value:$newTransactionAmount, format: .number)
+                TextField("0.0", text:$newTransactionAmount)
                     .font(.system(size: 60, weight: .bold))
                     .textFieldStyle(.plain)
                     .multilineTextAlignment(.leading)
@@ -79,7 +79,7 @@ struct NewEntryView: View{
                 ToolbarItem(placement: .confirmationAction){
                     Button("Save"){
                         
-                        let newTx = Transaction(amount: newTransactionAmount,
+                        let newTx = Transaction(amount: Double(newTransactionAmount) ?? 0.0,
                                                 type: entryType[entrySelected],
                                                 category: categories[categorySelected])
                         
