@@ -168,6 +168,7 @@ struct TransactionRow: View {
                 Spacer()
                 TransactionAmount(amount: transaction.amount)
             }
+            .foregroundStyle(Color.black)
             .padding(.vertical, 8)
         }
     }
