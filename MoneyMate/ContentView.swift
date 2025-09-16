@@ -67,6 +67,8 @@ struct ContentView: View {
             // Create Default Category
             
             seedDefaultCategory(context: context)
+            listenForTransactionUpdates(context: context)
+            
         }
        
     }

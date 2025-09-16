@@ -85,7 +85,7 @@ struct NewEntryView: View{
                         
                         context.insert(newTx)
                         try? context.save()
-                        
+                        pushToFirebase(newTx)
                         
                         dismiss()
                     }

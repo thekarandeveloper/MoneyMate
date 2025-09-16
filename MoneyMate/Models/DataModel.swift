@@ -10,26 +10,46 @@ import SwiftData
 
 
 @Model
-class Transaction: Identifiable, Hashable{
-    @Attribute var id : UUID = UUID()
+class Transaction: Identifiable, Hashable {
+    @Attribute(.unique) var id: UUID
     var amount: Double
-        var date: Date = Date()
-        var note: String?
-        var type: String // "income" or "expense"
+    var date: Date
+    var note: String?
+    var type: String // "income" or "expense"
+    var lastUpdated: Date
+    var isSynced: Bool
+    @Relationship(deleteRule: .nullify) var category: Category?
+
+    // Initializer
+    init(amount: Double,
+         date: Date = Date(),
+         note: String? = nil,
+         type: String,
+         category: Category? = nil,
+         lastUpdated: Date = Date(),
+         isSynced: Bool = false) {
         
-    @Relationship var category: Category? // Optional
-    
-    
-    init(amount:Double, date: Date = Date(), note: String? = nil, type: String, category: Category? = nil){
         self.id = UUID()
         self.amount = amount
-        self.category = category
-        self.date = Date()
+        self.date = date
         self.note = note
         self.type = type
+        self.category = category
+        self.lastUpdated = lastUpdated
+        self.isSynced = isSynced
+    }
+
+    // Conformance to Hashable
+    static func == (lhs: Transaction, rhs: Transaction) -> Bool {
+        lhs.id == rhs.id
     }
     
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
+    }
 }
+
+
 
 
 @Model
