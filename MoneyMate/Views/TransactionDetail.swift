@@ -9,7 +9,7 @@ import SwiftUI
 
 struct TransactionDetail: View {
     @Environment(\.dismiss) private var dismiss
-    
+    @State var transaction: Transaction
     var body: some View {
         
         VStack{
@@ -26,12 +26,12 @@ struct TransactionDetail: View {
                             .font(.system(size: 30, weight: .bold))
                             .foregroundColor(.pink)
                     )
-                Text("$10,000")
+                Text("\(transaction.amount)")
                     .font(.system(size: 60, weight: .bold))
                 
                 Divider().frame(maxWidth:200)
-                
-                Text("24 August, 2025")
+             
+                Text("\(transaction.date.formatted(date: .abbreviated, time: .shortened))")
                     .font(.system(size: 20, weight: .regular))
                 
                 Spacer().frame(maxHeight: 40)
@@ -52,7 +52,8 @@ struct TransactionDetail: View {
                             .font(.subheadline)
                             .foregroundColor(.gray)
                         Spacer()
-                        Text("Expense")
+                        
+                        Text("\(transaction.type.capitalized)")
                             .font(.subheadline)
                     }
 
@@ -63,7 +64,8 @@ struct TransactionDetail: View {
                             .font(.subheadline)
                             .foregroundColor(.gray)
                         Spacer()
-                        Text("Food")
+                        
+                        Text("\(transaction.category)")
                             .font(.subheadline)
                     }
 
@@ -74,7 +76,8 @@ struct TransactionDetail: View {
                             .font(.subheadline)
                             .foregroundColor(.gray)
                         Spacer()
-                        Text("$120.00")
+                       
+                        Text("\(transaction.amount)")
                             .font(.subheadline)
                             .bold()
                     }
@@ -86,7 +89,7 @@ struct TransactionDetail: View {
                             .font(.subheadline)
                             .foregroundColor(.gray)
                         Spacer()
-                        Text("16 Sep 2025")
+                        Text("\(transaction.amount)")
                             .font(.subheadline)
                     }
                 }
@@ -150,6 +153,6 @@ struct TransactionDetail: View {
         
     }
 }
-#Preview {
-    TransactionDetail()
-}
+//#Preview {
+//    TransactionDetail()
+//}

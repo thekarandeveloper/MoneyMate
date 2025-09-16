@@ -15,7 +15,7 @@ struct DashboardView: View{
     @State private var selected = 0
     @State private var goToDetailAnlytics: Bool = false
     @State private var goToTransactionDetail:Bool = false
-
+    @State private var selectedTransactions: Transaction?
     
     let durationOptions = ["Week", "Month"]
     
@@ -25,7 +25,7 @@ struct DashboardView: View{
     @Query(sort:\Category.name, order: .forward) var categories: [Category]
    
     
-    var body: some View{
+    var body: some View {
         
         // Total Balance
         
@@ -56,13 +56,12 @@ struct DashboardView: View{
         }
         
         // CATEGORIZED FILTERED TRANSACTIONS
-        let categoryTotals: [(category: Category, total: Double)] = categories.map {category in
-        
-            let totalAmount = category.transactions.filter{filterTransactions.contains($0) && $0.type == "expense"}
-                
-                .map(\.amount).reduce(0,+)
-            return (category, totalAmount)
-            
+        let categoryTotals: [CategoryTotal] = categories.map { category in
+            let totalAmount = category.transactions
+                .filter { filterTransactions.contains($0) && $0.type == "expense" }
+                .map(\.amount)
+                .reduce(0,+)
+            return CategoryTotal(id: category.id ?? UUID(), category: category, total: totalAmount)
         }
         
        
@@ -102,7 +101,7 @@ struct DashboardView: View{
                     }
                     
                     
-                    Chart(categoryTotals, id: \.category.id) { item in
+                    Chart(categoryTotals) { item in
                         BarMark(
                             x: .value("Category", item.category.name),
                             y: .value("Amount", item.total)
@@ -123,7 +122,9 @@ struct DashboardView: View{
                 }
                 
                 ForEach(transactions) { transaction in
-                    TransactionRow(transaction: transaction, goToTransactionDetail: $goToTransactionDetail)
+                    TransactionRow(transaction: transaction,
+                                   goToTransactionDetail: $goToTransactionDetail,
+                                   selectedTransactions: $selectedTransactions)
                 }
             }
         }
@@ -139,15 +140,15 @@ struct DashboardView: View{
                 .navigationTitle("All Transactions")
                 .navigationBarTitleDisplayMode(.large)
         }
-        .sheet(isPresented: $goToTransactionDetail){
+        
+        .sheet(item: $selectedTransactions){ tx in
             
-            NavigationStack{
-                TransactionDetail()
-                    
+            NavigationStack {
+                TransactionDetail(transaction: tx)
             }
-            
-           
         }
+        
+       
        
     }
     
@@ -158,9 +159,12 @@ struct DashboardView: View{
 struct TransactionRow: View {
     var transaction: Transaction
     @Binding var goToTransactionDetail: Bool
+    @Binding var selectedTransactions: Transaction?
+   
     var body: some View {
         Button {
-            goToTransactionDetail = true
+           
+            selectedTransactions = transaction
         } label: {
             HStack(spacing: 12) {
                 CategoryIcon(transaction: transaction)
@@ -179,11 +183,11 @@ struct CategoryIcon: View {
     var body: some View {
         ZStack {
             RoundedRectangle(cornerRadius: 12)
-                .fill(Color.white)
+                .fill(transaction.category?.color.opacity(0.2) ?? .blue)
                 .frame(width: 60, height: 60)
             Image(systemName: transaction.category?.iconName ?? "bag.fill")
                 .font(.system(size: 24))
-                .foregroundColor(.black)
+                .foregroundColor(transaction.category?.color ?? .blue)
         }
     }
 }
@@ -212,6 +216,6 @@ struct TransactionAmount: View {
     }
 }
 
-#Preview {
-    DashboardView()
-}
+//#Preview {
+//    DashboardView()
+//}

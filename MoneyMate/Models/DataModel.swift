@@ -31,22 +31,35 @@ class Transaction: Identifiable, Hashable{
     
 }
 
+
 @Model
-class Category: Identifiable {
-    @Attribute(.unique) var id: UUID
+class Category: Identifiable, Hashable{
+    var id: UUID? = UUID()
     var name: String
     var iconName: String
-    var colorHex: String
+    
     @Relationship(deleteRule: .nullify) var transactions: [Transaction] = []
+    // Stored RGB values
+    var red: Double = 1.0
+    var green: Double = 1.0
+    var blue: Double = 1.0
     
+    // Computed Color from RGB
+    var color: Color {
+        Color(red: red, green: green, blue: blue)
+    }
     
-    init(name: String, iconName: String, colorHex: String) {
-        self.id = UUID()
+    init(id:UUID? = UUID(), name: String, iconName: String, red: Double, green: Double, blue: Double) {
+        self.id = id
         self.name = name
         self.iconName = iconName
-        self.colorHex = colorHex
+        self.red = red
+        self.green = green
+        self.blue = blue
     }
 }
+
+
 
 @Model
 class Goal {
@@ -77,4 +90,10 @@ struct CategoryItem: Hashable {
     let name: String
     let iconName: String
     let color: Color
+}
+
+struct CategoryTotal: Identifiable {
+    let id: UUID
+    let category: Category
+    let total: Double
 }

@@ -79,11 +79,11 @@ func seedDefaultCategory(context: ModelContext){
     let existingCategories = (try? context.fetch(descriptor)) ?? []
     
     
-    let defaultCategories = [
-            Category(name: "Food", iconName: "fork.knife", colorHex: "#FF0000"),
-            Category(name: "Transport", iconName: "car.fill", colorHex: "#0000FF"),
-            Category(name: "Salary", iconName: "banknote.fill", colorHex: "#00FF00"),
-        ]
+    let defaultCategories: [Category] = [
+        Category(name: "Food", iconName: "fork.knife", red: 1.0, green: 0.6, blue: 0.0),      // orange
+        Category(name: "Transport", iconName: "car.fill", red: 0.6, green: 0.3, blue: 0.0),   // brown
+        Category(name: "Salary", iconName: "banknote.fill", red: 0.5, green: 0.0, blue: 0.5)   // purple
+    ]
     
     for cat in defaultCategories {
         print("Entered in function")
