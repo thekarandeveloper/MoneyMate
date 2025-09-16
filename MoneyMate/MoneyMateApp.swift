@@ -14,7 +14,7 @@ struct MoneyMateApp: App {
     
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            RootView()
                
         }.modelContainer(for: [Transaction.self, Category.self, Goal.self])
     }
