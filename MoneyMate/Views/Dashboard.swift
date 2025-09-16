@@ -8,6 +8,7 @@
 
 import SwiftUI
 import Charts
+import SwiftData
 
 struct DashboardView: View{
     
@@ -15,6 +16,15 @@ struct DashboardView: View{
     @State private var goToDetailAnlytics: Bool = false
     @State private var goToTransactionDetail:Bool = false
     let durationOptions = ["Week", "Month"]
+    
+    // Swift Data
+    @Query(sort: \Transaction.date, order: .reverse) var transactions: [Transaction]
+    
+    var totalBalance: Double {
+        let income = transactions.filter{$0.type == "income"}.map(\.amount).reduce(0,+)
+        let expense = transactions.filter{$0.type == "expense"}.map(\.amount).reduce(0,+)
+        return income - expense
+    }
     
     var body: some View{
         
@@ -41,7 +51,7 @@ struct DashboardView: View{
                 VStack{
                     Text("Wallet Balance")
                         .font(.callout)
-                    Text("$12129.56").font(.system(size: 55, weight: .bold, design: .default))
+                    Text("$\(totalBalance, specifier: "%.2f")").font(.system(size: 55, weight: .bold, design: .default))
                     Text("Last Updated 2 hours ago").font(.caption)
                 }.frame(maxWidth: .infinity).padding(20)
              
@@ -131,10 +141,6 @@ struct DashboardView: View{
                     }
                    
                 }
-                
-                
-               
-                
             }
         }
         

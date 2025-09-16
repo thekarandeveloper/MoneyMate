@@ -55,28 +55,7 @@ struct ContentView: View {
         }.sheet(isPresented: $showAddScreen){
             NavigationStack{
                 NewEntryView()
-                    .navigationTitle("New Entry")
-                    .navigationBarTitleDisplayMode(.inline)
-                    .toolbar{
-                        
-                        // Left Button
-                        
-                        ToolbarItem(placement: .cancellationAction){
-                            Button("Cancel"){
-                                showAddScreen = false
-                            }
-                        }
-                        
-                        
-                        // Right Button
-                        
-                        ToolbarItem(placement: .confirmationAction){
-                            Button("Save"){
-                                showAddScreen = false
-                            }
-                        }
-                        
-                    }
+                
             }
         }
        

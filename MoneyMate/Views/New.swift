@@ -8,12 +8,13 @@
 import SwiftUI
 
 struct NewEntryView: View{
-    
+    @Environment(\.modelContext) private var context
+    @Environment(\.dismiss) private var dismiss
     @State private var entrySelected = 0
     @State private var categorySelected = 0
-    @State private var text = ""
+    @State private var newTransactionAmount: Double = 0.0
     @FocusState private var isFocused: Bool
-    let entryType = ["Expense", "Income"]
+    let entryType = ["expense", "income"]
     let category = ["Rent", "Misc", "karan", "food", "transport", "salary"]
     var body: some View{
         
@@ -31,7 +32,7 @@ struct NewEntryView: View{
             Spacer().frame(maxHeight: 20)
             HStack(alignment: .center, spacing: 0){
                 Text("$").font(.system(size: 60, weight: .bold))
-                TextField("0.0", text: $text)
+                TextField("0.0", value:$newTransactionAmount, format: .number)
                     .font(.system(size: 60, weight: .bold))
                     .textFieldStyle(.plain)
                     .multilineTextAlignment(.leading)
@@ -60,11 +61,41 @@ struct NewEntryView: View{
                 isFocused = true
             }
         }
+        .navigationTitle("New Entry")
+        .navigationBarTitleDisplayMode(.inline)
+        .toolbar{
+            
+            // Left Button
+            
+            ToolbarItem(placement: .cancellationAction){
+                Button("Cancel"){
+                   dismiss()
+                }
+            }
+            
+            
+            // Right Button
+            
+            ToolbarItem(placement: .confirmationAction){
+                Button("Save"){
+                    
+                    let newTx = Transaction(amount: newTransactionAmount, category: category[categorySelected], type: entryType[entrySelected])
+                    
+                    context.insert(newTx)
+                    try? context.save()
+                    
+                    
+                    dismiss()
+                }
+            }
+            
+        }
         
        
         
         
     }
+       
 }
 
 #Preview{
