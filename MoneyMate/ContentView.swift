@@ -63,41 +63,29 @@ struct ContentView: View {
                     
             }
         }.task {
-            
-            // Create Default Category
-            
-            seedDefaultCategory(context: context)
-//            listenForTransactionUpdates(context: context)
-            
+            await seedDefaultCategory(context: context)
         }
        
     }
 }
 
-func seedDefaultCategory(context: ModelContext){
-    // Fetch Existing Categories
-    
-    let descriptor = FetchDescriptor<Category>() // fetch all Category
+func seedDefaultCategory(context: ModelContext) async {
+    let descriptor = FetchDescriptor<Category>()
     let existingCategories = (try? context.fetch(descriptor)) ?? []
-    
-    
+
     let defaultCategories: [Category] = [
-        Category(name: "Food", iconName: "fork.knife", red: 1.0, green: 0.6, blue: 0.0),      // orange
-        Category(name: "Transport", iconName: "car.fill", red: 0.6, green: 0.3, blue: 0.0),   // brown
-        Category(name: "Salary", iconName: "banknote.fill", red: 0.5, green: 0.0, blue: 0.5)   // purple
+        Category(name: "Food", iconName: "fork.knife", red: 1.0, green: 0.6, blue: 0.0),
+        Category(name: "Transport", iconName: "car.fill", red: 0.6, green: 0.3, blue: 0.0),
+        Category(name: "Salary", iconName: "banknote.fill", red: 0.5, green: 0.0, blue: 0.5)
     ]
-    
+
     for cat in defaultCategories {
-        print("Entered in function")
-        if !existingCategories.contains(where: {$0.name == cat.name}){
+        if !existingCategories.contains(where: { $0.name == cat.name }) {
             context.insert(cat)
-            print("Creating", cat.name)
         }
     }
-    
-    try? context.save()
-    
-    
+
+    try? await context.save() // <-- important for @Query to pick up
 }
 
 #Preview {

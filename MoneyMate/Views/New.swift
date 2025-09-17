@@ -83,9 +83,11 @@ struct NewEntryView: View{
                                                 type: entryType[entrySelected],
                                                 category: categories[categorySelected])
                         
-                        context.insert(newTx)
-                        try? context.save()
-                        pushToFirebase(newTx)
+                       
+                        Task{
+                            await FirestoreManager.shared.save(newTx, in: "transactions", context: context)
+                        }
+                        
                         
                         dismiss()
                     }

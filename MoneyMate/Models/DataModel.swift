@@ -12,7 +12,7 @@ import FirebaseFirestore
 
 
 @Model
-class Transaction: FirestoreModel, Identifiable, Hashable {
+class Transaction: FirestoreModel, Identifiable, Codable {
     @Attribute(.unique) var id: String = UUID().uuidString
     var amount: Double
     var date: Date
@@ -20,9 +20,11 @@ class Transaction: FirestoreModel, Identifiable, Hashable {
     var type: String // "income" or "expense"
     var lastUpdated: Date
     var isSynced: Bool
+    
+    // Only store categoryId in Firestore (not full Category relationship)
+    var categoryId: String?
     @Relationship(deleteRule: .nullify) var category: Category?
 
-    // Initializer
     init(amount: Double,
          date: Date = Date(),
          note: String? = nil,
@@ -37,47 +39,76 @@ class Transaction: FirestoreModel, Identifiable, Hashable {
         self.note = note
         self.type = type
         self.category = category
+        self.categoryId = category?.id.uuidString
         self.lastUpdated = lastUpdated
         self.isSynced = isSynced
     }
 
-    // Conformance to Hashable
-    static func == (lhs: Transaction, rhs: Transaction) -> Bool {
-        lhs.id == rhs.id
+
+    // MARK: - Codable
+    enum CodingKeys: String, CodingKey {
+        case id, amount, date, note, type, lastUpdated, isSynced, categoryId
     }
-    
-    func hash(into hasher: inout Hasher) {
-        hasher.combine(id)
+
+    required init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        id = try container.decode(String.self, forKey: .id)
+        amount = try container.decode(Double.self, forKey: .amount)
+        date = try container.decode(Date.self, forKey: .date)
+        note = try container.decodeIfPresent(String.self, forKey: .note)
+        type = try container.decode(String.self, forKey: .type)
+        lastUpdated = try container.decode(Date.self, forKey: .lastUpdated)
+        isSynced = try container.decode(Bool.self, forKey: .isSynced)
+        categoryId = try container.decodeIfPresent(String.self, forKey: .categoryId)
+    }
+
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(id, forKey: .id)
+        try container.encode(amount, forKey: .amount)
+        try container.encode(date, forKey: .date)
+        try container.encode(note, forKey: .note)
+        try container.encode(type, forKey: .type)
+        try container.encode(lastUpdated, forKey: .lastUpdated)
+        try container.encode(isSynced, forKey: .isSynced)
+        try container.encode(categoryId, forKey: .categoryId)
     }
 }
 
 
-
-
 @Model
-class Category: Identifiable, Hashable{
-    var id: UUID? = UUID()
+class Category: Identifiable, Hashable {
+    @Attribute(.unique) var id: UUID = UUID()
     var name: String
     var iconName: String
     
     @Relationship(deleteRule: .nullify) var transactions: [Transaction] = []
+    
     // Stored RGB values
     var red: Double = 1.0
     var green: Double = 1.0
     var blue: Double = 1.0
     
-    // Computed Color from RGB
+    // Computed Color
     var color: Color {
         Color(red: red, green: green, blue: blue)
     }
     
-    init(id:UUID? = UUID(), name: String, iconName: String, red: Double, green: Double, blue: Double) {
-        self.id = id
+    init(name: String, iconName: String, red: Double, green: Double, blue: Double) {
         self.name = name
         self.iconName = iconName
         self.red = red
         self.green = green
         self.blue = blue
+    }
+    
+    // MARK: - Hashable
+    static func == (lhs: Category, rhs: Category) -> Bool {
+        lhs.id == rhs.id
+    }
+    
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
     }
 }
 
@@ -98,10 +129,6 @@ class Goal {
     }
 }
 
-@Model
-struct Transaction: FirestoreModel {
-    
-}
 
 
 // Simple Transactions
