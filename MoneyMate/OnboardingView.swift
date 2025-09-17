@@ -6,13 +6,24 @@
 //
 import SwiftUI
 import AuthenticationServices
+import FirebaseAuth
+import FirebaseCore
+import GoogleSignIn
 struct OnboardingView: View {
-    @Binding var hasSeenOnboarding: Bool
+    @Binding var isAuthenticated: Bool
     @State private var currentPage = 0
+    
+    
+    // Page Control Color
+    
     let images = ["First", "Second", "Third"]
     let titles = ["Track Your Expenses", "Set Goals", "Analyze Your Spending"]
-    let subtitles = ["Know where your money goes", "Plan better for the future", "Make informed decisions"]
-    
+
+    let subtitles = [
+        "Stay in control by recording every income and expense with ease.",
+        "Define clear money goals and watch your progress step by step.",
+        "Understand your habits with smart insights that guide better choices."
+    ]
     
     let timer = Timer.publish(every: 3, on: .main, in: .common).autoconnect()
     
@@ -36,28 +47,31 @@ struct OnboardingView: View {
                                 .transition(.slide) // slide transition
                                 .animation(.easeInOut, value: currentPage)
                             
-                            Text(titles[index])
-                                .font(.title)
-                                .bold()
-                                .transition(.opacity.combined(with: .scale))
-                                .animation(.easeInOut, value: currentPage)
+                            VStack {
+                                Text(titles[index])
+                                    .font(.title)
+                                    .bold()
+                                    .transition(.opacity.combined(with: .scale))
+                                    .animation(.easeInOut, value: currentPage)
+                                Text(subtitles[index])
+                                    .font(.subheadline)
+                                    .multilineTextAlignment(.center)
+                                    .padding(.horizontal, 30)
+                                    .transition(.opacity)
+                                    .animation(.easeInOut, value: currentPage)
+                            }
                             
-                            Text(subtitles[index])
-                                .font(.subheadline)
-                                .multilineTextAlignment(.center)
-                                .padding(.horizontal, 30)
-                                .transition(.opacity)
-                                .animation(.easeInOut, value: currentPage)
+                           
                         }
                         .tag(index)
                         .background(Color(red: 246/255, green: 246/255, blue: 246/255))
                         
                     }
                 }
-                .frame(maxHeight: 500)
+                .frame(maxHeight: 450)
                 
                 .tabViewStyle(PageTabViewStyle())
-                .indexViewStyle(PageIndexViewStyle(backgroundDisplayMode: .always))
+                .indexViewStyle(PageIndexViewStyle(backgroundDisplayMode: .never))
                 .onReceive(timer){ _ in
                     withAnimation{
                         currentPage = (currentPage + 1) % titles.count
@@ -65,8 +79,18 @@ struct OnboardingView: View {
                     
                 }
                 
+                HStack(spacing: 8){
+                    ForEach(0..<titles.count, id:\.self){ index in
+                        
+                        Circle()
+                            .fill(currentPage == index ? Color.blue : Color.gray.opacity(0.5))
+                            .frame(width: currentPage == index ? 12 : 8, height: currentPage == index ? 12: 8, alignment: .center).animation(.easeInOut, value:currentPage)
+                        
+                    }
+                }.padding(8)
                 
-                Spacer().frame(maxHeight: 30)
+                
+                Spacer().frame(maxHeight: 60)
                 
                 
                 
@@ -85,8 +109,7 @@ struct OnboardingView: View {
                 
                 // 🔹 Google Sign In
                 Button {
-                    // handle Google sign in
-                    print("Google tapped")
+                    signInWithGoogle()
                 } label: {
                     HStack {
                         Image("googleLogo")
@@ -115,8 +138,51 @@ struct OnboardingView: View {
       
         
     }
+    func signInWithGoogle() {
+        // 1. Get the clientID from Firebase config (GoogleService-Info.plist)
+        guard let clientID = FirebaseApp.app()?.options.clientID else { return }
+
+        // 2. Create a Google Sign-In configuration using that clientID
+        let config = GIDConfiguration(clientID: clientID)
+        GIDSignIn.sharedInstance.configuration = config
+
+        // 3. Get the current app window’s root ViewController (needed to present Google’s sign-in UI)
+        guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+              let rootVC = windowScene.windows.first?.rootViewController else {
+            return
+        }
+
+        // 4. Start the Google Sign-In flow
+        GIDSignIn.sharedInstance.signIn(withPresenting: rootVC) { signInResult, error in
+            // 5. Handle errors if Google sign-in fails
+            if let error = error {
+                print("Google Sign-In failed: \(error.localizedDescription)")
+                return
+            }
+
+            // 6. Get the signed-in Google user and tokens
+            guard let user = signInResult?.user,
+                  let idToken = user.idToken?.tokenString else { return }
+
+            let accessToken = user.accessToken.tokenString
+
+            // 7. Convert Google tokens into Firebase credentials
+            let credential = GoogleAuthProvider.credential(withIDToken: idToken,
+                                                           accessToken: accessToken)
+
+            // 8. Sign in to Firebase with those credentials
+            Auth.auth().signIn(with: credential) { result, error in
+                // 9. Handle Firebase errors
+                if let error = error {
+                    print("Firebase Sign-In failed: \(error.localizedDescription)")
+                    return
+                }
+
+                // 10. Success! User is now authenticated with Firebase
+                print("User signed in with Google: \(result?.user.uid ?? "")")
+                isAuthenticated = true
+            }
+        }
+    }
 }
 
-#Preview {
-    OnboardingView(hasSeenOnboarding: .constant(false))
-}

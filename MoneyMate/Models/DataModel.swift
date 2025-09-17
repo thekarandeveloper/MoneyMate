@@ -4,14 +4,16 @@
 //
 //  Created by Karan Kumar on 14/09/25.
 //
+
+import Foundation
 import SwiftUI
 import SwiftData
-
+import FirebaseFirestore
 
 
 @Model
-class Transaction: Identifiable, Hashable {
-    @Attribute(.unique) var id: UUID
+class Transaction: FirestoreModel, Identifiable, Hashable {
+    @Attribute(.unique) var id: String = UUID().uuidString
     var amount: Double
     var date: Date
     var note: String?
@@ -29,7 +31,7 @@ class Transaction: Identifiable, Hashable {
          lastUpdated: Date = Date(),
          isSynced: Bool = false) {
         
-        self.id = UUID()
+        self.id = UUID().uuidString
         self.amount = amount
         self.date = date
         self.note = note
@@ -94,6 +96,11 @@ class Goal {
         self.currentAmount = currentAmount
         self.deadline = deadline
     }
+}
+
+@Model
+struct Transaction: FirestoreModel {
+    
 }
 
 

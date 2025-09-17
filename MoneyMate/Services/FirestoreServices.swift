@@ -9,72 +9,88 @@ import Firebase
 import FirebaseFirestore
 import SwiftData
 
-
-func pushToFirebase(_ tx: Transaction){
-    @Environment(\.modelContext) var context
-
-    let db = Firestore.firestore()
-    let data: [String: Any] = [
-        "id": "\(tx.id)",
-        "amount": tx.amount,
-        "type": tx.type,
-        "date": Timestamp(date: tx.date),
-        "categoryId": "\(tx.category?.id)" ?? "",
-        "lastUpdated": tx.lastUpdated,
-    ]
+@MainActor
+class FirestoreManager {
+    static let shared = FirestoreManager()
+    private let db = Firestore.firestore()
     
+    private init() {}
     
-    db.collection("transactions").document("\(tx.id)").setData(data){ error in
-        if let error = error {
-            print("Push failed: \(error)")
-        } else {
-            print("Pushed transaction \(tx.id)")
-            tx.isSynced = true
+    // Mark: - Create / Update
+    
+    func save<T: FirestoreModel & PersistentModel>(_ model: T, in collection: String, context: ModelContext) async{
+        do{
+            
+            // Save on Server
+            let data = try Firestore.Encoder().encode(model)
+            try await db.collection(collection).document(model.id).setData(data)
+            
+            
+            // Save Locally
+            context.insert(model)
             try? context.save()
+        } catch {
+            print("Error saving: \(error.localizedDescription)")
         }
-        
     }
     
     
+    // MARK: - Read
+    
+    func fetch<T: FirestoreModel & PersistentModel>(_ type: T.Type, from collection: String, context: ModelContext) async -> [T] {
+        do{
+            let snapshot = try await db.collection(collection).getDocuments()
+            let models = try snapshot.documents.compactMap{doc in
+                try doc.data(as: T.self)
+            }
+            
+            
+            // Save Locally
+            models.forEach{context.insert($0)}
+            try? context.save()
+            return models
+        } catch {
+            print("Error fetching: \(error.localizedDescription)")
+            return []
+        }
+    }
+    // MARK: - Delete
+        func delete<T: FirestoreModel & PersistentModel>(_ model: T, from collection: String, context: ModelContext) async {
+            do {
+                try await db.collection(collection).document(model.id).delete()
+                context.delete(model)
+                try? context.save()
+            } catch {
+                print("❌ Error deleting: \(error.localizedDescription)")
+            }
+        }
+        
+        // MARK: - Real-time Sync
+        func listen<T: FirestoreModel & PersistentModel>(_ type: T.Type, in collection: String, context: ModelContext) {
+            db.collection(collection).addSnapshotListener { snapshot, error in
+                guard let docs = snapshot?.documents else { return }
+                
+                for doc in docs {
+                    do {
+                        let remoteModel = try doc.data(as: T.self)
+                        
+                        // Check if exists locally
+                        if let local = try? context.fetch(FetchDescriptor<T>(predicate: #Predicate { $0.id == remoteModel.id })).first {
+                            if local.lastUpdated < remoteModel.lastUpdated {
+                                // 🔄 Update local
+                                context.delete(local)
+                                context.insert(remoteModel)
+                            }
+                        } else {
+                            // 🔄 Insert new
+                            context.insert(remoteModel)
+                        }
+                    } catch {
+                        print("❌ Error decoding: \(error.localizedDescription)")
+                    }
+                }
+                try? context.save()
+            }
+        }
 }
 
-//func listenForTransactionUpdates(context: ModelContext) {
-//    print("Started listening")
-//
-//    let db = Firestore.firestore()
-//    db.collection("transactions")
-//        .addSnapshotListener { snapshot, error in
-//            guard let docs = snapshot?.documents else { return }
-//
-//            for doc in docs {
-//                let data = doc.data()
-//                let id = data["id"] as! String
-//                let amount = data["amount"] as! Double
-//                let type = data["type"] as! String
-//                let date = (data["date"] as! Timestamp).dateValue()
-//                let lastUpdated = (data["lastUpdated"] as? Timestamp)?.dateValue() ?? Date()
-//
-//                // ✅ Predicate ko properly likho
-//                let fetchDescriptor = FetchDescriptor<Transaction>(
-//                    predicate: #Predicate { "\($0.id)" == id }
-//                )
-//
-//                if let localTx = try? context.fetch(fetchDescriptor).first {
-//                    if localTx.lastUpdated < lastUpdated {
-//                        localTx.amount = amount
-//                        localTx.type = type
-//                        localTx.date = date
-//                        localTx.lastUpdated = lastUpdated
-//                        try? context.save()
-//                    }
-//                } else {
-//                    let newTx = Transaction(amount: amount,
-//                                            date: date,
-//                                            type: type,
-//                                            lastUpdated: lastUpdated)
-//                    context.insert(newTx)
-//                    try? context.save()
-//                }
-//            }
-//        }
-//}
