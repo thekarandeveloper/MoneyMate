@@ -73,23 +73,27 @@ struct OnboardingView: View {
             }.signInWithAppleButtonStyle(.black)
                 .frame(height: 50)
                 .frame(maxWidth: .infinity) // full width
-//                           .cornerRadius(8)
-//                           .padding(10)
-                           .padding(.horizontal, 20)
+                .padding(.horizontal, 20)
+            
+            
+            
             // 🔹 Google Sign In
                         Button {
                             // handle Google sign in
                             print("Google tapped")
                         } label: {
                             HStack {
-                                Image(systemName: "g.circle.fill")
+                                Image("googleLogo")
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(width: 30, height: 30, alignment: .center)
                                     .foregroundColor(.red)
                                     .font(.title2)
                                 Text("Sign in with Google")
                                     .font(.headline)
                                     .foregroundColor(.black)
                             }
-                            .frame(maxWidth: .infinity) // full width
+                            .frame(maxWidth: .infinity, maxHeight: 25) // full width
                             .padding()
                             .background(Color.white)
                             .overlay(
