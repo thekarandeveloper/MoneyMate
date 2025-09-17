@@ -16,7 +16,7 @@ struct RootView: View {
             if showSplash {
                 SplashView()
             } else {
-                if !hasSeenOnboarding {
+                if true {
                     OnboardingView(hasSeenOnboarding: $hasSeenOnboarding)
                 } else if !isAuthenticated {
                     AuthView(isAuthenticated: $isAuthenticated)

@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		CD01481F2E79FF49007595FD /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = CD01481E2E79FF49007595FD /* GoogleService-Info.plist */; };
 		CDCFB40A2E79F607007914FC /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = CDCFB4092E79F607007914FC /* FirebaseAuth */; };
 		CDCFB40C2E79F607007914FC /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = CDCFB40B2E79F607007914FC /* FirebaseFirestore */; };
 		CDCFB5612E79FA70007914FC /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = CDCFB5602E79FA70007914FC /* GoogleSignIn */; };
@@ -15,7 +14,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		CD01481E2E79FF49007595FD /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		CD753B9C2E769D2D00413C15 /* MoneyMate.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MoneyMate.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -58,7 +56,6 @@
 		CD753B932E769D2D00413C15 = {
 			isa = PBXGroup;
 			children = (
-				CD01481E2E79FF49007595FD /* GoogleService-Info.plist */,
 				CD753B9E2E769D2D00413C15 /* MoneyMate */,
 				CD753B9D2E769D2D00413C15 /* Products */,
 			);
@@ -144,7 +141,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				CD01481F2E79FF49007595FD /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
