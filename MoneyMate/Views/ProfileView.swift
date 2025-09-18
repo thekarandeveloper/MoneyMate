@@ -60,23 +60,28 @@ struct avatarView: View{
        }
     var body: some View{
         
-        VStack(spacing: 20){
-            Image("Mark")
-                .resizable()
-                .frame(width: 100, height: 100)
-                .clipShape(Circle())
-                .scaledToFill()
-            
-            VStack {
-                Text("\(personalInfo.name)")
-                    .font(.headline)
-                Text("Joined \(personalInfo.lastUpdated.formatted(date: .abbreviated, time: .omitted))")
-                    .font(.callout)
+       
+            VStack(spacing: 20){
+                Image("Mark")
+                    .resizable()
+                    .frame(width: 100, height: 100)
+                    .clipShape(Circle())
+                    .scaledToFill()
+                
+                VStack {
+                    Text("\(personalInfo.name)")
+                        .font(.headline)
+                    Text("Joined \(personalInfo.lastUpdated.formatted(date: .abbreviated, time: .omitted))")
+                        .font(.callout)
+                }
+                
             }
-           
             
-        }
         
+        
+       
+        
+       
     }
     
 }
