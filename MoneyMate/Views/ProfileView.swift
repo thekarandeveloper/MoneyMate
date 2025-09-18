@@ -7,7 +7,7 @@
 
 import SwiftUI
 import FirebaseAuth
-
+import SwiftData
 struct ProfileView: View{
     
     @Environment(\.dismiss) private var dismiss
@@ -18,6 +18,7 @@ struct ProfileView: View{
             Spacer().frame(height: 20)
             avatarView()
             ProfileDetails()
+            Spacer()
             LogoutButton{
                 logout()
             }.padding()
@@ -75,17 +76,16 @@ struct avatarView: View{
 import SwiftUI
 
 struct ProfileDetails: View {
-    let personalInfo = [
-        ("Name", "Karan Kumar"),
-        ("Email", "karan@example.com"),
-        ("Phone", "+91 9876543210")
-    ]
+    @Query var user: [User]
     
-    let workInfo = [
-        ("Company", "ABC Pvt Ltd"),
-        ("Position", "iOS Developer")
-    ]
-
+    var personalInfo: [(String, String)]{
+        [
+            ("Name", user.first?.name ?? "User Name"),
+            ("Email", user.first?.email ?? "Unknown Email")
+        ]
+    }
+    
+    
     var body: some View {
         List {
             Section(header: Text("Personal Info").font(.headline)) {
@@ -104,21 +104,6 @@ struct ProfileDetails: View {
                 }
             }
 
-            Section(header: Text("Work Info").font(.headline)) {
-                ForEach(workInfo, id: \.0) { item in
-                    HStack {
-                        Text(item.0)
-                            .foregroundColor(.gray)
-                        Spacer()
-                        Text(item.1)
-                            .foregroundColor(.black)
-                            .fontWeight(.semibold)
-                    }
-                    .padding(.vertical, 8)
-                    .background(Color.white)
-                    .cornerRadius(8)
-                }
-            }
         }
         .listStyle(.insetGrouped)
         .scrollContentBackground(.hidden) // hide default list background
