@@ -48,7 +48,7 @@ struct NotificationView: View {
                     .background(Color.white)
                     .clipShape(RoundedRectangle(cornerRadius: 12))
                 }
-                .padding() // outer padding for VStack
+                .padding() 
             }
         }
     }

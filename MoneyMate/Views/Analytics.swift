@@ -7,19 +7,48 @@
 
 import SwiftUI
 import Charts
-
+import SwiftData
 struct AnalyticsView: View {
     
     @State private var selected = 0
-    let durationOptions = ["Week", "Month"]
+    let durationOptions = ["Week", "Month", "Year"]
+    
+    // Swift Data
+    @Query(sort: \Transaction.date, order: .reverse) var transactions: [Transaction]
+    @Query(sort: \Category.name, order:.forward) var categories: [Category]
+    
+    
     
     var body: some View {
-        let sampleExpenses: [Expense] = [
-            Expense(category: "Food", amount: 120),
-            Expense(category: "Travel", amount: 80),
-            Expense(category: "Shopping", amount: 200),
-            Expense(category: "Bills", amount: 60)
-        ]
+        // Category
+        
+        /// FILTER TRANSACTION ACC. TO DATE
+        var filterTransactions: [Transaction] {
+            let now = Date()
+            
+            
+            switch selected {
+            case 0:
+                let weekAgo = Calendar.current.date(byAdding: .day, value: -7, to: now)!
+                return transactions.filter{$0.date >= weekAgo}
+            case 1:
+                let monthAgo = Calendar.current.date(byAdding: .month, value: -1, to: now)!
+                       return transactions.filter { $0.date >= monthAgo }
+            default:
+                return transactions
+            }
+            
+        }
+        
+        // CATEGORIZED FILTERED TRANSACTIONS
+        let categoryTotals: [CategoryTotal] = categories.map { category in
+            let totalAmount = category.transactions
+                .filter { filterTransactions.contains($0) && $0.type == "expense" }
+                .map(\.amount)
+                .reduce(0,+)
+            return CategoryTotal(id: category.id ?? UUID(), category: category, total: totalAmount)
+        }
+        
         
         ScrollView(.vertical, showsIndicators: false) {
             
@@ -29,23 +58,20 @@ struct AnalyticsView: View {
             VStack(spacing: 20) {
                 
                 HStack {
-                    
-                    Spacer()
-                    
                     Picker("Options", selection: $selected) {
                         ForEach(0..<durationOptions.count, id: \.self) { index in
                             Text(durationOptions[index])
                         }
                     }
                     .pickerStyle(.segmented)
-                    .frame(width: 180) // better width
+                    .frame(width: .infinity)
                 }
                 .padding(.vertical, 8)
                 
-                Chart(sampleExpenses) { expense in
+                Chart(categoryTotals) { item in
                     BarMark(
-                        x: .value("Category", expense.category),
-                        y: .value("Amount", expense.amount)
+                        x: .value("Category", item.category.name),
+                        y: .value("Amount", item.total)
                     )
                     .foregroundStyle(
                         LinearGradient(colors: [.blue, .purple],
@@ -64,7 +90,10 @@ struct AnalyticsView: View {
             
             LazyVGrid(columns: [GridItem(.flexible()),
                                 GridItem(.flexible())], spacing: 16){
-                ForEach(0...10, id: \.self){ index in
+                ForEach(0..<categories.count, id: \.self){ index in
+                    let category = categories[index]
+                           let totalForCategory = categoryTotals.first(where: { $0.category.id == category.id })?.total ?? 0.0
+                           
                     RoundedRectangle(cornerRadius: 12)
                         .fill(Color.white)
                         .frame(height: 120)
@@ -75,7 +104,7 @@ struct AnalyticsView: View {
                                 
                                 HStack{
                                    
-                                    Image(systemName: "heart").font(.system(size:20, weight:.bold))
+                                    Image(systemName: "\( category.iconName)").font(.system(size:20, weight:.bold))
                                         .frame(width: 15, height: 15, alignment: .center)
                                         .padding(10)
                                         .background(Color.gray.opacity(0.3))
@@ -84,10 +113,11 @@ struct AnalyticsView: View {
                                     Image(systemName: "chevron.right")
                                 }
                                 
-                               
+                                
                                 Spacer()
-                                Text("Card heading").font(.headline)
-                                Text("Card heading").font(.caption)
+                                Text("\(category.name)").font(.headline)
+                                Text("$\(totalForCategory, specifier: "%.2f")")
+                                    .font(.caption)
                                
                                 
                             }.padding(10)
