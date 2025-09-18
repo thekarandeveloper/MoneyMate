@@ -6,13 +6,13 @@
 //
 
 import SwiftUI
-
+import SwiftData
 struct CustomNavigationBarView: View {
     
     @State var selectedTab: Tab
     @State private var goToProfile = false
     @State private var goToNotification = false
-    
+    @Query var user: [User]
     var body: some View {
         HStack {
             switch selectedTab {
@@ -27,7 +27,7 @@ struct CustomNavigationBarView: View {
                             .clipShape(RoundedRectangle(cornerRadius: 12))
                         
                         VStack(alignment: .leading) {
-                            Text("Hi, Alex").font(.headline).foregroundStyle(.black)
+                            Text("Hi, \(user.first?.name ?? "User")").font(.headline).foregroundStyle(.black)
                             Text("Welcome Back").font(.caption).foregroundStyle(.black)
                         }
                     }

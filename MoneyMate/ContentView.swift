@@ -21,6 +21,7 @@ struct ContentView: View {
             
           
             // Content of selected tab
+            
             Group {
                 switch selectedTab {
                 case .dashboard:

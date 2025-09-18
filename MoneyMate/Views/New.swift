@@ -7,6 +7,7 @@
 
 import SwiftUI
 import SwiftData
+import FirebaseAuth
 struct NewEntryView: View{
     @Environment(\.modelContext) private var context
     @Environment(\.dismiss) private var dismiss
@@ -79,7 +80,7 @@ struct NewEntryView: View{
                 ToolbarItem(placement: .confirmationAction){
                     Button("Save"){
                         
-                        let newTx = Transaction(amount: Double(newTransactionAmount) ?? 0.0,
+                        let newTx = Transaction(userID: Auth.auth().currentUser?.uid ?? "unknownUserID", amount: Double(newTransactionAmount) ?? 0.0,
                                                 type: entryType[entrySelected],
                                                 category: categories[categorySelected])
                         

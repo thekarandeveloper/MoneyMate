@@ -12,7 +12,7 @@ import GoogleSignIn
 struct OnboardingView: View {
     @Binding var isAuthenticated: Bool
     @State private var currentPage = 0
-    
+    @Environment(\.modelContext) private var context
     
     // Page Control Color
     
@@ -178,11 +178,37 @@ struct OnboardingView: View {
                     return
                 }
 
+                guard let user = result?.user else { return }
+                let uid = user.uid
+                let email = user.email ?? ""
+                let name = user.displayName ?? ""
+               
+                
+                
+                isAuthenticated = true
+                
+                Task{
+                    await createUser(id: uid, name: name, email: email)
+                }
+                
                 // 10. Success! User is now authenticated with Firebase
                 print("User signed in with Google: \(result?.user.uid ?? "")")
-                isAuthenticated = true
+                
             }
         }
     }
+    
+    func createUser(id: String, name: String, email: String) async {
+       
+        
+        let user = User(id: id, name: name, email: email)
+        
+        
+        Task{
+            await FirestoreManager.shared.save(user, in: "Users", context: context)
+        }
+      
+    }
+    
 }
 

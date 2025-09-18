@@ -12,20 +12,62 @@ import FirebaseFirestore
 
 
 @Model
+class User:FirestoreModel, Identifiable, Codable {
+    @Attribute(.unique) var id: String   // Firebase UID
+    var name: String
+    var email: String
+    var lastUpdated: Date = Date()
+    
+    // MARK: - Codable conformance
+    enum CodingKeys: String, CodingKey {
+        case id, name, email, lastUpdated
+    }
+
+    // MARK: - Custom init
+    init(id: String, name: String, email: String, lastUpdated: Date = Date()) {
+        self.id = id
+        self.name = name
+        self.email = email
+        self.lastUpdated = lastUpdated
+    }
+    
+    required init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.id = try container.decode(String.self, forKey: .id)
+        self.name = try container.decode(String.self, forKey: .name)
+        self.email = try container.decode(String.self, forKey: .email)
+        self.lastUpdated = try container.decode(Date.self, forKey: .lastUpdated)
+    }
+
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(id, forKey: .id)
+        try container.encode(name, forKey: .name)
+        try container.encode(email, forKey: .email)
+        try container.encode(lastUpdated, forKey: .lastUpdated)
+    }
+
+  
+}
+
+
+@Model
 class Transaction: FirestoreModel, Identifiable, Codable {
     @Attribute(.unique) var id: String = UUID().uuidString
+    var userID: String
     var amount: Double
     var date: Date
     var note: String?
     var type: String // "income" or "expense"
     var lastUpdated: Date
     var isSynced: Bool
-    
     // Only store categoryId in Firestore (not full Category relationship)
     var categoryId: String?
     @Relationship(deleteRule: .nullify) var category: Category?
 
-    init(amount: Double,
+    init(
+        userID: String,
+        amount: Double,
          date: Date = Date(),
          note: String? = nil,
          type: String,
@@ -33,7 +75,9 @@ class Transaction: FirestoreModel, Identifiable, Codable {
          lastUpdated: Date = Date(),
          isSynced: Bool = false) {
         
+             
         self.id = UUID().uuidString
+        self.userID = userID
         self.amount = amount
         self.date = date
         self.note = note
@@ -47,12 +91,13 @@ class Transaction: FirestoreModel, Identifiable, Codable {
 
     // MARK: - Codable
     enum CodingKeys: String, CodingKey {
-        case id, amount, date, note, type, lastUpdated, isSynced, categoryId
+        case id, userID, amount, date, note, type, lastUpdated, isSynced, categoryId
     }
 
     required init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         id = try container.decode(String.self, forKey: .id)
+        userID = try container.decode(String.self, forKey: .userID)
         amount = try container.decode(Double.self, forKey: .amount)
         date = try container.decode(Date.self, forKey: .date)
         note = try container.decodeIfPresent(String.self, forKey: .note)
@@ -65,6 +110,7 @@ class Transaction: FirestoreModel, Identifiable, Codable {
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(id, forKey: .id)
+        try container.encode(userID, forKey: .userID)
         try container.encode(amount, forKey: .amount)
         try container.encode(date, forKey: .date)
         try container.encode(note, forKey: .note)

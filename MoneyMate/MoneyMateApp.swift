@@ -26,7 +26,7 @@ struct MoneyMateApp: App {
         WindowGroup {
             RootView()
             
-        }.modelContainer(for: [Transaction.self, Category.self, Goal.self])
+        }.modelContainer(for: [User.self, Transaction.self, Category.self, Goal.self])
     }
     
     
