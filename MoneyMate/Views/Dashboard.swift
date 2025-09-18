@@ -157,7 +157,7 @@ struct DashboardView: View{
    
     
 }
-struct TransactionRow: View {
+private struct TransactionRow: View {
     var transaction: Transaction
     @Binding var goToTransactionDetail: Bool
     @Binding var selectedTransactions: Transaction?

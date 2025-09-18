@@ -11,6 +11,7 @@ import SwiftData
 struct AnalyticsView: View {
     
     @State private var selected = 0
+    @State private var selectedCategoryID:UUID? = nil
     let durationOptions = ["Week", "Month", "Year"]
     
     // Swift Data
@@ -49,7 +50,12 @@ struct AnalyticsView: View {
             return CategoryTotal(id: category.id ?? UUID(), category: category, total: totalAmount)
         }
         
-        
+        var categoryRows: [CategoryRowData] {
+            categories.map { category in
+                let total = categoryTotals.first(where: { $0.category.id == category.id })?.total ?? 0
+                return CategoryRowData(category: category, total: total)
+            }
+        }
         ScrollView(.vertical, showsIndicators: false) {
             
             // Navigation Bar
@@ -88,43 +94,33 @@ struct AnalyticsView: View {
             .shadow(color: .gray.opacity(0.2), radius: 5, x: 0, y: 2)
             
             
-            LazyVGrid(columns: [GridItem(.flexible()),
-                                GridItem(.flexible())], spacing: 16){
-                ForEach(0..<categories.count, id: \.self){ index in
-                    let category = categories[index]
-                           let totalForCategory = categoryTotals.first(where: { $0.category.id == category.id })?.total ?? 0.0
-                           
-                    RoundedRectangle(cornerRadius: 12)
-                        .fill(Color.white)
-                        .frame(height: 120)
-                        .background(Color.white)
-                        .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
-                        .overlay(
-                            VStack(alignment: .leading){
-                                
-                                HStack{
-                                   
-                                    Image(systemName: "\( category.iconName)").font(.system(size:20, weight:.bold))
-                                        .frame(width: 15, height: 15, alignment: .center)
-                                        .padding(10)
-                                        .background(Color.gray.opacity(0.3))
-                                        .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+            LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 16) {
+                ForEach(categoryRows) { row in
+                    Button {
+                        selectedCategoryID = row.category.id
+                    } label: {
+                        RoundedRectangle(cornerRadius: 12)
+                            .fill(Color.white)
+                            .frame(height: 120)
+                            .overlay(
+                                VStack(alignment: .leading) {
+                                    HStack {
+                                        Image(systemName: row.category.iconName)
+                                            .font(.system(size: 20, weight: .bold))
+                                            .frame(width: 15, height: 15)
+                                            .padding(10)
+                                            .background(Color.gray.opacity(0.3))
+                                            .clipShape(RoundedRectangle(cornerRadius: 12))
+                                        Spacer()
+                                        Image(systemName: "chevron.right")
+                                    }
                                     Spacer()
-                                    Image(systemName: "chevron.right")
+                                    Text(row.category.name).font(.headline)
+                                    Text("$\(row.total, specifier: "%.2f")").font(.caption)
                                 }
-                                
-                                
-                                Spacer()
-                                Text("\(category.name)").font(.headline)
-                                Text("$\(totalForCategory, specifier: "%.2f")")
-                                    .font(.caption)
-                               
-                                
-                            }.padding(10)
-                                .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
-                            
-                        )
-                    
+                                .padding(10)
+                            )
+                    }
                 }
             }
             
@@ -132,10 +128,14 @@ struct AnalyticsView: View {
         }
         .padding(20)
         .background(Color(red: 246/255, green: 246/255, blue: 246/255))
-        
+       
+        .navigationDestination(item: $selectedCategoryID){tx in
+            
+            NavigationStack {
+                AnalyticDetail(selectedCategoryID: $selectedCategoryID)
+            }
+            
+        }
+      
     }
-}
-
-#Preview {
-    AnalyticsView()
 }

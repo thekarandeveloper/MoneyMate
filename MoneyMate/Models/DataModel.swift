@@ -197,3 +197,8 @@ struct CategoryTotal: Identifiable {
     let category: Category
     let total: Double
 }
+struct CategoryRowData: Identifiable {
+    let id = UUID()
+    let category: Category
+    let total: Double
+}
