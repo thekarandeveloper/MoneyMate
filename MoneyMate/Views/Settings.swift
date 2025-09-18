@@ -6,36 +6,52 @@
 //
 import SwiftUI
 
-struct SettingsView: View{
-    let fruits = ["Apple", "Banana", "Mango"]
-    var body: some View{
-        
-        ScrollView(.vertical, showsIndicators: false){
-            // Navigation Bar
-            CustomNavigationBarView(selectedTab:.settings)
-            
-            Spacer().frame(height: 20)
-            
-            // Lists
-            VStack(spacing: 20){
-                ForEach(fruits, id:\.self){ fruit in
-                    HStack(alignment: .top){
-                        Image( "Mark").resizable().frame(width: 60, height: 60).clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
-                        VStack(alignment: .leading){
-                            Text("\(fruit.capitalized)").font(.title3).bold()
-                           
-                            Text("August 23, 2003").font(.caption)
-                            Spacer()
+struct SettingsView: View {
+    @AppStorage("selectedCurrency") private var selectedCurrency: String = "USD"
+    @AppStorage("isDarkMode") private var isDarkMode: Bool = false
+    @AppStorage("notificationsEnabled") private var notificationsEnabled: Bool = true
+
+    let currencies = ["USD", "EUR", "INR", "GBP", "JPY"]
+
+    var body: some View {
+        NavigationStack {
+            Form {
+                // MARK: - Currency Picker
+                Section(header: Text("Currency")) {
+                    Picker("Select Currency", selection: $selectedCurrency) {
+                        ForEach(currencies, id: \.self) { currency in
+                            Text(currency)
                         }
-                        Spacer()
-                        HStack{
-                            Text("$123").font(.title3).bold()
+                    }
+                    .pickerStyle(.menu)
+                }
+
+                // MARK: - Theme Toggle
+                Section(header: Text("Theme")) {
+                    Toggle(isOn: $isDarkMode) {
+                        Text("Dark Mode")
+                    }
+                    .onChange(of: isDarkMode) { newValue in
+                        // Optional: Update app-wide theme dynamically
+                        if newValue {
+                            UIApplication.shared.windows.first?.overrideUserInterfaceStyle = .dark
+                        } else {
+                            UIApplication.shared.windows.first?.overrideUserInterfaceStyle = .light
                         }
-                    }.frame(height: 60)
+                    }
+                }
+
+                // MARK: - Notifications
+                Section(header: Text("Notifications")) {
+                    Toggle("Enable Notifications", isOn: $notificationsEnabled)
                 }
             }
-           
-            
-        }.padding(20)
+            .navigationTitle("Settings")
+            .background(Color(red: 246/255, green: 246/255, blue: 246/255))
+        }
     }
+}
+
+#Preview {
+    SettingsView()
 }

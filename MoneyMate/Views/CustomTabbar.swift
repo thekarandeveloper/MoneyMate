@@ -22,10 +22,7 @@ struct CustomTabbar: View {
         HStack{
             tabButton(.dashboard, icon: "house.fill", title: "Dashboard")
             Spacer()
-           
            tabButton(.analytics, icon: "chart.bar.fill", title: "Analytics")
-           Spacer()
-            tabButton(.goals, icon: "checkmark.seal.fill", title: "Goals")
            Spacer()
            tabButton(.settings, icon: "gearshape.fill", title: "Settings")
         }.padding().background(Color.white)
