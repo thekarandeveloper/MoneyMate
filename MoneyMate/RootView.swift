@@ -10,7 +10,7 @@ import FirebaseAuth
 struct RootView: View {
     @State private var isAuthenticated = Auth.auth().currentUser != nil
     @State private var showSplash = true
-
+    @Environment(\.modelContext) private var context
     var body: some View {
         ZStack {
             if showSplash {
@@ -18,6 +18,12 @@ struct RootView: View {
             } else {
                 if isAuthenticated {
                     ContentView()
+                        .task{
+                            print("Task is running to listen")
+                            // Firestore Listers
+                            FirestoreManager.shared.listenUserTransactions(context: context)
+                            
+                    }
                 } else {
                     OnboardingView(isAuthenticated: $isAuthenticated)
                 }

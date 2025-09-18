@@ -8,7 +8,7 @@ import SwiftUI
 import Firebase
 import FirebaseFirestore
 import SwiftData
-
+import FirebaseAuth
 @MainActor
 class FirestoreManager {
     static let shared = FirestoreManager()
@@ -65,32 +65,67 @@ class FirestoreManager {
             }
         }
         
+    
         // MARK: - Real-time Sync
-        func listen<T: FirestoreModel & PersistentModel>(_ type: T.Type, in collection: String, context: ModelContext) {
-            db.collection(collection).addSnapshotListener { snapshot, error in
-                guard let docs = snapshot?.documents else { return }
-                
-                for doc in docs {
-                    do {
-                        let remoteModel = try doc.data(as: T.self)
-                        
-                        // Check if exists locally
-                        if let local = try? context.fetch(FetchDescriptor<T>(predicate: #Predicate { $0.id == remoteModel.id })).first {
-                            if local.lastUpdated < remoteModel.lastUpdated {
-                                // 🔄 Update local
-                                context.delete(local)
-                                context.insert(remoteModel)
-                            }
-                        } else {
-                            // 🔄 Insert new
-                            context.insert(remoteModel)
-                        }
-                    } catch {
-                        print("❌ Error decoding: \(error.localizedDescription)")
-                    }
-                }
-                try? context.save()
-            }
+    func listenUserTransactions(context: ModelContext) {
+        guard let uid = Auth.auth().currentUser?.uid else {
+            print("❌ No authenticated user found")
+            return
         }
+        
+        let db = Firestore.firestore()
+        print("🔹 Listening for transactions for user: \(uid)")
+        
+        db.collection("transactions")
+          .whereField("userID", isEqualTo: uid)
+          .addSnapshotListener { snapshot, error in
+              
+              if let error = error {
+                  print("❌ Firestore listener error: \(error.localizedDescription)")
+                  return
+              }
+              
+              guard let docs = snapshot?.documents else {
+                  print("⚠️ No documents in snapshot")
+                  return
+              }
+              
+              print("📄 Received \(docs.count) documents from Firestore")
+              
+              for doc in docs {
+                  do {
+                      let remoteTx = try doc.data(as: Transaction.self)
+                      print("➡️ Fetched transaction from server: id=\(remoteTx.id), amount=\(remoteTx.amount), lastUpdated=\(remoteTx.lastUpdated)")
+                      
+                      if let localTx = try? context.fetch(FetchDescriptor<Transaction>(
+                          predicate: #Predicate { $0.id == remoteTx.id }
+                      )).first {
+                          
+                          if localTx.lastUpdated < remoteTx.lastUpdated {
+                              print("🔄 Updating local transaction: \(localTx.id)")
+                              context.delete(localTx)
+                              context.insert(remoteTx)
+                          } else {
+                              print("✅ Local transaction is up-to-date: \(localTx.id)")
+                          }
+                          
+                      } else {
+                          print("➕ Inserting new local transaction: \(remoteTx.id)")
+                          context.insert(remoteTx)
+                      }
+                      
+                  } catch {
+                      print("❌ Error decoding transaction: \(error.localizedDescription)")
+                  }
+              }
+              
+              do {
+                  try context.save()
+                  print("💾 Local context saved successfully")
+              } catch {
+                  print("❌ Error saving local context: \(error.localizedDescription)")
+              }
+          }
+    }
 }
 

@@ -48,8 +48,16 @@ struct ProfileView: View{
 }
 
 struct avatarView: View{
-   
+    @Query var user: [User]
     
+    var personalInfo: User {
+           if let firstUser = user.first {
+               return firstUser
+           } else {
+               // Return a placeholder/default User if none exists
+               return User(id: "0", name: "User Name", email: "example@example.com", lastUpdated: Date())
+           }
+       }
     var body: some View{
         
         VStack(spacing: 20){
@@ -60,9 +68,9 @@ struct avatarView: View{
                 .scaledToFill()
             
             VStack {
-                Text("Karan Kumar")
+                Text("\(personalInfo.name)")
                     .font(.headline)
-                Text("Regular")
+                Text("Joined \(personalInfo.lastUpdated.formatted(date: .abbreviated, time: .omitted))")
                     .font(.callout)
             }
            
