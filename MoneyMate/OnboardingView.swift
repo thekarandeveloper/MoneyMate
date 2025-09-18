@@ -4,11 +4,13 @@
 //
 //  Created by Karan Kumar on 17/09/25.
 //
+
 import SwiftUI
 import AuthenticationServices
 import FirebaseAuth
 import FirebaseCore
 import GoogleSignIn
+
 struct OnboardingView: View {
     @Binding var isAuthenticated: Bool
     @State private var currentPage = 0
