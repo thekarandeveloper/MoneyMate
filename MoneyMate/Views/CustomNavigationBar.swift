@@ -21,10 +21,16 @@ struct CustomNavigationBarView: View {
                     goToProfile = true
                 } label: {
                     HStack {
-                        Image("Mark")
-                            .resizable()
-                            .frame(width: 50, height: 50)
-                            .clipShape(RoundedRectangle(cornerRadius: 12))
+                        ZStack {
+                            RoundedRectangle(cornerRadius: 12)
+                                .fill(Color.white) // background white for contrast
+                                .frame(width: 50, height: 50)
+                                .shadow(color: .black.opacity(0.1), radius: 3, x: 0, y: 2) // halka shadow
+
+                            Image(systemName: "person.fill")
+                                .font(.system(size: 24, weight: .medium))
+                                .foregroundColor(.blue) // icon ka main color
+                        }
                         
                         VStack(alignment: .leading) {
                             Text("Hi, \(user.first?.name ?? "User")").font(.headline).foregroundStyle(.black)
@@ -82,13 +88,4 @@ struct CustomNavigationBarView: View {
                 .navigationBarTitleDisplayMode(.inline)
         }
     }
-}
-
-#Preview {
-    NavigationStack {   
-        CustomNavigationBarView(selectedTab: .dashboard)
-    }
-}
-#Preview{
-    CustomNavigationBarView(selectedTab: .dashboard)
 }

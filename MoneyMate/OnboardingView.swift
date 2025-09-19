@@ -15,7 +15,7 @@ struct OnboardingView: View {
     @Binding var isAuthenticated: Bool
     @State private var currentPage = 0
     @Environment(\.modelContext) private var context
-    
+    @State private var currentNonce: String? = nil
     // Page Control Color
     
     let images = ["First", "Second", "Third"]
@@ -97,15 +97,23 @@ struct OnboardingView: View {
                 
                 
                 // Apple Sign In Button
-                SignInWithAppleButton(.signIn){ request in
+                SignInWithAppleButton(.signIn) { request in
+                    let nonce = randomNonceString()
+                    currentNonce = nonce
                     request.requestedScopes = [.fullName, .email]
-                    
+                    request.nonce = sha256(nonce) // 🔹 hashed nonce
                 } onCompletion: { result in
-                    print(result)
-                }.signInWithAppleButtonStyle(.black)
-                    .frame(height: 50)
-                    .frame(maxWidth: .infinity) // full width
-                    .padding(.horizontal, 20)
+                    switch result {
+                    case .success(let authResults):
+                        handleAuthorization(authResults)
+                    case .failure(let error):
+                        print("❌ Sign in with Apple failed: \(error.localizedDescription)")
+                    }
+                }
+                .signInWithAppleButtonStyle(.black)
+                .frame(height: 50)
+                .frame(maxWidth: .infinity)
+                .padding(.horizontal, 20)
                 
                 
                 
@@ -199,7 +207,47 @@ struct OnboardingView: View {
             }
         }
     }
-    
+    func handleAuthorization(_ authResults: ASAuthorization) {
+        if let credential = authResults.credential as? ASAuthorizationAppleIDCredential {
+            guard let identityToken = credential.identityToken,
+                  let tokenString = String(data: identityToken, encoding: .utf8) else {
+                print("Unable to fetch identity token")
+                return
+            }
+
+            guard let nonce = currentNonce else {
+                print("Invalid state: No login request was sent.")
+                return
+            }
+
+            // Use Apple-specific Firebase credential
+            let firebaseCredential = OAuthProvider.appleCredential(
+                withIDToken: tokenString,
+                rawNonce: nonce,
+                fullName: credential.fullName
+            )
+
+            Auth.auth().signIn(with: firebaseCredential) { result, error in
+                if let error = error {
+                    print("Firebase Apple Sign-In failed: \(error.localizedDescription)")
+                    return
+                }
+
+                guard let user = result?.user else { return }
+                let uid = user.uid
+                let email = user.email ?? credential.email ?? "Unknown"
+                let fullName = credential.fullName?.givenName ?? user.displayName ?? "User"
+
+                print("Firebase Apple Sign-In success, uid=\(uid)")
+
+                Task {
+                    await createUser(id: uid, name: fullName, email: email)
+                }
+
+                isAuthenticated = true
+            }
+        }
+    }
     func createUser(id: String, name: String, email: String) async {
        
         
