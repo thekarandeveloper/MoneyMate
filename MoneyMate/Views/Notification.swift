@@ -35,17 +35,17 @@ struct NotificationView: View {
                                 .foregroundColor(.black)
                             Text("Notification Description")
                                 .font(.caption)
-                                .foregroundColor(.gray)
+                                .foregroundColor(Color("secondaryText"))
                             HStack {
                                 Spacer()
                                 Text("Date")
                                     .font(.caption2)
-                                    .foregroundColor(.gray)
+                                    .foregroundColor(Color("secondaryText"))
                             }
                         }
                     }
                     .padding()
-                    .background(Color.white)
+                    .background(Color("secondaryBackground"))
                     .clipShape(RoundedRectangle(cornerRadius: 12))
                 }
                 .padding() 

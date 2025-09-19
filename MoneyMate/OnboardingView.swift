@@ -86,7 +86,7 @@ struct OnboardingView: View {
                     ForEach(0..<titles.count, id:\.self){ index in
                         
                         Circle()
-                            .fill(currentPage == index ? Color.blue : Color.gray.opacity(0.5))
+                            .fill(currentPage == index ? Color.blue : Color("secondaryText").opacity(0.5))
                             .frame(width: currentPage == index ? 12 : 8, height: currentPage == index ? 12: 8, alignment: .center).animation(.easeInOut, value:currentPage)
                         
                     }
@@ -135,9 +135,9 @@ struct OnboardingView: View {
                     }
                     .frame(maxWidth: .infinity, maxHeight: 22) // full width
                     .padding()
-                    .background(Color.white)
+                    .background(Color("secondaryBackground"))
                     .overlay(
-                        RoundedRectangle(cornerRadius: 10, style: .continuous).stroke(Color.gray, lineWidth: 1)
+                        RoundedRectangle(cornerRadius: 10, style: .continuous).stroke(Color("secondaryText"), lineWidth: 1)
                     )
                     .cornerRadius(10)
                     

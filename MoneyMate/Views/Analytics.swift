@@ -88,9 +88,9 @@ struct AnalyticsView: View {
             }
             .frame(maxWidth: .infinity)
             .padding(20)
-            .background(Color.white)
+            .background(Color("secondaryBackground"))
             .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
-            .shadow(color: .gray.opacity(0.2), radius: 5, x: 0, y: 2)
+            
             
             
             LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 16) {
@@ -99,7 +99,7 @@ struct AnalyticsView: View {
                         selectedCategoryID = row.category.id
                     } label: {
                         RoundedRectangle(cornerRadius: 12)
-                            .fill(Color.white)
+                            .fill(Color("secondaryBackground"))
                             .frame(height: 120)
                             .overlay(
                                 VStack(alignment: .leading) {
@@ -110,7 +110,7 @@ struct AnalyticsView: View {
                                             .frame(width: 30, height: 30)
                                             .padding(.vertical,10)
                                             .padding(.leading, 0)
-//                                            .background(Color.gray.opacity(0.3))
+
                                             .clipShape(RoundedRectangle(cornerRadius: 12))
                                         Spacer()
                                         Image(systemName: "chevron.right")
@@ -120,7 +120,7 @@ struct AnalyticsView: View {
                                     Text(row.category.name).font(.headline)
                                     Text("$\(row.total, specifier: "%.2f")").font(.caption)
                                 }
-                                .foregroundStyle(Color.black)
+                                .foregroundStyle(Color("Text"))
                                 .padding(10)
                             )
                     }

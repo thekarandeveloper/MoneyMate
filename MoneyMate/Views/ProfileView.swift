@@ -105,14 +105,14 @@ struct ProfileDetails: View {
                 ForEach(personalInfo, id: \.0) { item in
                     HStack {
                         Text(item.0) // Question / Label
-                            .foregroundColor(.gray)
+                            .foregroundColor(Color("secondaryText"))
                         Spacer()
                         Text(item.1) // Answer / Value
                             .foregroundColor(.black)
                             .fontWeight(.semibold)
                     }
                     .padding(.vertical, 8)
-                    .background(Color.white)
+                    .background(Color("secondaryBackground"))
                     .cornerRadius(8)
                 }
             }

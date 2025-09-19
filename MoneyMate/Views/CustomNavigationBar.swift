@@ -23,9 +23,9 @@ struct CustomNavigationBarView: View {
                     HStack {
                         ZStack {
                             RoundedRectangle(cornerRadius: 12)
-                                .fill(Color.white) // background white for contrast
+                                .fill(Color("secondaryBackground"))
                                 .frame(width: 50, height: 50)
-                                .shadow(color: .black.opacity(0.1), radius: 3, x: 0, y: 2) // halka shadow
+                                .shadow(color: .black.opacity(0.1), radius: 3, x: 0, y: 2)
 
                             Image(systemName: "person.fill")
                                 .font(.system(size: 24, weight: .medium))
@@ -33,8 +33,8 @@ struct CustomNavigationBarView: View {
                         }
                         
                         VStack(alignment: .leading) {
-                            Text("Hi, \(user.first?.name ?? "User")").font(.headline).foregroundStyle(.black)
-                            Text("Welcome Back").font(.caption).foregroundStyle(.black)
+                            Text("Hi, \(user.first?.name ?? "User")").font(.headline).foregroundStyle(Color("text"))
+                            Text("Welcome Back").font(.caption).foregroundStyle(Color("text"))
                         }
                     }
                 }
@@ -59,15 +59,17 @@ struct CustomNavigationBarView: View {
             Button {
                 goToNotification = true
             } label: {
-                Image(systemName: "bell")
-                    .foregroundStyle(.black)
-                    .font(.system(size: 24, weight: .light))
-                    .frame(width: 50, height: 50)
-                    .padding(1)
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 20)
-                            .stroke(Color.gray, lineWidth: 0.5)
-                    )
+                ZStack{
+                    RoundedRectangle(cornerRadius: 12)
+                        .fill(Color("secondaryBackground"))
+                        .frame(width: 50, height: 50)
+                        .shadow(color: .black.opacity(0.1), radius: 3, x: 0, y: 2)
+
+                    Image(systemName: "person.fill")
+                        .font(.system(size: 24, weight: .medium))
+                        .foregroundColor(.blue) 
+                }
+               
             }
         }
         .frame(height: 60)

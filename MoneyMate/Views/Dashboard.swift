@@ -111,7 +111,7 @@ struct DashboardView: View{
                         .cornerRadius(10)
                     }.frame(height: 250)
                 }.frame(maxWidth: .infinity, maxHeight: 350).padding(20)
-                    .background(Color.white)
+                    .background(Color("secondaryBackground"))
                     .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
                 
                 HStack(alignment: .center){
@@ -173,7 +173,7 @@ private struct TransactionRow: View {
                 Spacer()
                 TransactionAmount(amount: transaction.amount)
             }
-            .foregroundStyle(Color.black)
+            .foregroundStyle(Color("Text"))
             .padding(.vertical, 8)
         }
     }
@@ -184,7 +184,7 @@ struct CategoryIcon: View {
     var body: some View {
         ZStack {
             RoundedRectangle(cornerRadius: 12, style: .continuous)
-                .fill(Color.white) // or category color with opacity
+                .fill(Color("secondaryBackground")) // or category color with opacity
                 .frame(width: 60, height: 60)
 
             Image(transaction.category?.iconName ?? "coin") // your asset name

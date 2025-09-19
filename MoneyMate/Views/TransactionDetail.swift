@@ -11,136 +11,144 @@ struct TransactionDetail: View {
     @Environment(\.dismiss) private var dismiss
     @State var transaction: Transaction
     var body: some View {
-        
-        VStack{
-           
-            // Transaction Category
-            
-            VStack(alignment: .center, spacing: 10){
-                
-                Circle()
-                    .fill(Color.pink.opacity(0.1)) // background directly circle ke andar
-                    .frame(width: 80, height: 80)
-                    .overlay(
-                        Image(systemName: "heart")
-                            .font(.system(size: 30, weight: .bold))
-                            .foregroundColor(.pink)
-                    )
-                Text("\(transaction.amount, specifier:"%.2f")")
-                    .font(.system(size: 60, weight: .bold))
-                
-                Divider().frame(maxWidth:200)
-             
-                Text("\(transaction.date.formatted(date: .abbreviated, time: .shortened))")
-                    .font(.system(size: 16, weight: .regular))
-                
-                Spacer().frame(maxHeight: 40)
-                
-                
-                
-                // Details Table
-                
-                
-                VStack(alignment: .center, spacing: 16) {
-                    Text("Transaction Details")
-                        .foregroundStyle(Color.gray.opacity(0.7))
-                        .font(.headline)
-                        .padding(.bottom, 12)
+        ZStack {
+                    Color("backgroundColor")
+                        .ignoresSafeArea() 
 
-                    HStack {
-                        Text("Type")
-                            .font(.subheadline)
-                            .foregroundColor(.gray)
-                        Spacer()
-                        
-                        Text("\(transaction.type.capitalized)")
-                            .font(.subheadline)
-                    }
+                    VStack {
+                        VStack{
+                           
+                            // Transaction Category
+                            
+                            VStack(alignment: .center, spacing: 10){
+                                
+                                Circle()
+                                    .fill(Color.pink.opacity(0.1)) // background directly circle ke andar
+                                    .frame(width: 80, height: 80)
+                                    .overlay(
+                                        Image(systemName: "heart")
+                                            .font(.system(size: 30, weight: .bold))
+                                            .foregroundColor(.pink)
+                                    )
+                                Text("\(transaction.amount, specifier:"%.2f")")
+                                    .font(.system(size: 60, weight: .bold))
+                                
+                                Divider().frame(maxWidth:200)
+                             
+                                Text("\(transaction.date.formatted(date: .abbreviated, time: .shortened))")
+                                    .font(.system(size: 16, weight: .regular))
+                                
+                                Spacer().frame(maxHeight: 40)
+                                
+                                
+                                
+                                // Details Table
+                                
+                                
+                                VStack(alignment: .center, spacing: 16) {
+                                    Text("Transaction Details")
+                                        .foregroundStyle(Color("secondaryText").opacity(0.7))
+                                        .font(.headline)
+                                        .padding(.bottom, 12)
 
-                    Divider()
+                                    HStack {
+                                        Text("Type")
+                                            .font(.subheadline)
+                                            .foregroundColor(Color("secondaryText"))
+                                        Spacer()
+                                        
+                                        Text("\(transaction.type.capitalized)")
+                                            .font(.subheadline)
+                                    }
 
-                    HStack {
-                        Text("Category")
-                            .font(.subheadline)
-                            .foregroundColor(.gray)
-                        Spacer()
-                        if let category = transaction.category?.name {
-                            Text(category)
-                                .font(.subheadline)
-                        } else {
-                            Text("Uncategorized")
-                                .font(.subheadline)
-                                .foregroundColor(.gray)
+                                    Divider()
+
+                                    HStack {
+                                        Text("Category")
+                                            .font(.subheadline)
+                                            .foregroundColor(Color("secondaryText"))
+                                        Spacer()
+                                        if let category = transaction.category?.name {
+                                            Text(category)
+                                                .font(.subheadline)
+                                        } else {
+                                            Text("Uncategorized")
+                                                .font(.subheadline)
+                                                .foregroundColor(Color("secondaryText"))
+                                        }
+                                       
+                                    }
+
+                                    Divider()
+
+                                    HStack {
+                                        Text("Amount")
+                                            .font(.subheadline)
+                                            .foregroundColor(Color("secondaryText"))
+                                        Spacer()
+                                       
+                                        Text("\(transaction.amount)")
+                                            .font(.subheadline)
+                                            .bold()
+                                    }
+
+                                    Divider()
+                                    HStack {
+                                        Text("Modified Date")
+                                            .font(.subheadline)
+                                            .foregroundColor(Color("secondaryText"))
+                                        Spacer()
+                                        
+                                        Text("\(transaction.date.formatted(date: .abbreviated, time: .omitted))")
+                                            .font(.subheadline)
+                                    }
+                                    Divider()
+                                    HStack {
+                                        Text("Created Date")
+                                            .font(.subheadline)
+                                            .foregroundColor(Color("secondaryText"))
+                                        Spacer()
+                                        Text("\(transaction.date.formatted(date: .abbreviated, time: .omitted))")
+                                            .font(.subheadline)
+                                    }
+                                 
+                                }
+                                .padding()
+                                .background(Color("secondaryBackground"))
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: 12)
+                                        .stroke(Color("secondaryText").opacity(0.3), lineWidth: 1)
+                                )
+                                .clipShape(RoundedRectangle(cornerRadius: 12))
+                                
+                                .padding(.horizontal)
+                                
+                                Spacer()
+                                
+                                Button {
+                                    // Open edit sheet
+                                } label: {
+                                    
+                                    RoundedRectangle(cornerRadius: 30, style: .continuous)
+                                        .frame(maxWidth: .infinity, maxHeight: 60).overlay(
+                                            Text("Edit Transaction")
+                                                .foregroundColor(.white)
+                                        )
+                                }
+                                
+                              
+                                
+                            }
+                            
+                            
+                            
+                            
                         }
-                       
+                        .padding(20)
                     }
-
-                    Divider()
-
-                    HStack {
-                        Text("Amount")
-                            .font(.subheadline)
-                            .foregroundColor(.gray)
-                        Spacer()
-                       
-                        Text("\(transaction.amount)")
-                            .font(.subheadline)
-                            .bold()
-                    }
-
-                    Divider()
-                    HStack {
-                        Text("Modified Date")
-                            .font(.subheadline)
-                            .foregroundColor(.gray)
-                        Spacer()
-                        
-                        Text("\(transaction.date.formatted(date: .abbreviated, time: .omitted))")
-                            .font(.subheadline)
-                    }
-                    Divider()
-                    HStack {
-                        Text("Created Date")
-                            .font(.subheadline)
-                            .foregroundColor(.gray)
-                        Spacer()
-                        Text("\(transaction.date.formatted(date: .abbreviated, time: .omitted))")
-                            .font(.subheadline)
-                    }
-                 
+                    .padding(20)
                 }
-                .padding()
-                .background(Color.white)
-                .overlay(
-                    RoundedRectangle(cornerRadius: 12)
-                        .stroke(Color.gray.opacity(0.3), lineWidth: 1)
-                )
-                .clipShape(RoundedRectangle(cornerRadius: 12))
-                
-                .padding(.horizontal)
-                
-                Spacer()
-                
-                Button {
-                    // Open edit sheet
-                } label: {
-                    
-                    RoundedRectangle(cornerRadius: 30, style: .continuous)
-                        .frame(maxWidth: .infinity, maxHeight: 60).overlay(
-                            Text("Edit Transaction")
-                                .foregroundColor(.white)
-                        )
-                }
-                
-              
-                
-            }
-            
-            
-            
-            
-        }
-        .padding(20)
+      
         .navigationTitle("Transaction Detail")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar{

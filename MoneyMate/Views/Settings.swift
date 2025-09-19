@@ -17,19 +17,20 @@ struct SettingsView: View {
                 Section(header: Text("Theme")) {
                     Toggle(isOn: $themeManager.isDarkMode) {
                         Text("Dark Mode")
-                    }
-                    
+                    }.listRowBackground(Color("secondaryBackground"))
                 }
 
                 // MARK: - Notifications
                 Section(header: Text("Notifications")) {
                     Toggle("Enable Notifications", isOn: $notificationsEnabled)
-                }
+                }.listRowBackground(Color("secondaryBackground"))
+                
             }
+            
+            .scrollContentBackground(.hidden)
+            .background(Color("backgroundColor"))
             .navigationTitle("Settings")
-           
-        }.background(Color("backgroundColor"))
-        
+        }
     }
 }
 

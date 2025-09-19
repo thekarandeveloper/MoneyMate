@@ -52,7 +52,7 @@ struct AnalyticDetail: View {
                             }
                             .frame(height: 240)
                             .padding()
-                            .background(Color.white)
+                            .background(Color("secondaryBackground"))
                             .clipShape(RoundedRectangle(cornerRadius: 16))
                            
                         }
@@ -66,7 +66,7 @@ struct AnalyticDetail: View {
                                     HStack {
                                         Text(tx.date.formatted(date: .abbreviated, time: .omitted))
                                             .font(.subheadline)
-                                            .foregroundColor(.gray)
+                                            .foregroundColor(Color("secondaryText"))
 
                                         Spacer()
 
@@ -75,7 +75,7 @@ struct AnalyticDetail: View {
                                             .foregroundColor(tx.type == "income" ? .green : .red)
                                     }
                                     .padding()
-                                    .background(Color.white)
+                                    .background(Color("secondaryBackground"))
                                     .clipShape(RoundedRectangle(cornerRadius: 10))
                                     
                                 }

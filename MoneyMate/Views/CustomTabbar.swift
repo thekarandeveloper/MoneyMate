@@ -25,7 +25,7 @@ struct CustomTabbar: View {
            tabButton(.analytics, icon: "chart.bar.fill", title: "Analytics")
            Spacer()
            tabButton(.settings, icon: "gearshape.fill", title: "Settings")
-        }.padding().background(Color.white)
+        }.padding().background(Color("secondaryBackground"))
     }
     
     func tabButton(_ tab: Tab, icon:String, title:String) -> some View {
@@ -40,7 +40,7 @@ struct CustomTabbar: View {
                     .font(.system(size: 20, weight: .bold))
                 Text(title)
                     .font(.caption)
-            }.foregroundColor(selectedTab == tab ? .blue : .gray)
+            }.foregroundColor(selectedTab == tab ? .blue : Color("secondaryText"))
         }
     }
     
