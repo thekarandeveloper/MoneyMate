@@ -183,12 +183,15 @@ struct CategoryIcon: View {
     var transaction: Transaction
     var body: some View {
         ZStack {
-            RoundedRectangle(cornerRadius: 12)
-                .fill(transaction.category?.color.opacity(0.2) ?? .blue)
+            RoundedRectangle(cornerRadius: 12, style: .continuous)
+                .fill(Color.white) // or category color with opacity
                 .frame(width: 60, height: 60)
-            Image(systemName: transaction.category?.iconName ?? "bag.fill")
-                .font(.system(size: 24))
-                .foregroundColor(transaction.category?.color ?? .blue)
+
+            Image(transaction.category?.iconName ?? "coin") // your asset name
+                .resizable()
+                .scaledToFit() // keeps aspect ratio
+                .frame(width: 32, height: 32) // nice balanced size
+                .clipped()
         }
     }
 }
