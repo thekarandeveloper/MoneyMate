@@ -14,6 +14,8 @@ class AppDelegate: NSObject, UIApplicationDelegate {
                      didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
         // Configure Firebase at launch
         FirebaseApp.configure()
+        NotificationManager.shared.configureRemoteNotifications()
+        NotificationManager.shared.requestPermission()
         return true
     }
 }

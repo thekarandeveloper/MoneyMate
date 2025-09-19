@@ -11,6 +11,7 @@
 		CDCFB40C2E79F607007914FC /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = CDCFB40B2E79F607007914FC /* FirebaseFirestore */; };
 		CDCFB5612E79FA70007914FC /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = CDCFB5602E79FA70007914FC /* GoogleSignIn */; };
 		CDCFB5632E79FA70007914FC /* GoogleSignInSwift in Frameworks */ = {isa = PBXBuildFile; productRef = CDCFB5622E79FA70007914FC /* GoogleSignInSwift */; };
+		CDE7C3252E7DB4F900430822 /* FirebaseMessaging in Frameworks */ = {isa = PBXBuildFile; productRef = CDE7C3242E7DB4F900430822 /* FirebaseMessaging */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -45,6 +46,7 @@
 			files = (
 				CDCFB40A2E79F607007914FC /* FirebaseAuth in Frameworks */,
 				CDCFB40C2E79F607007914FC /* FirebaseFirestore in Frameworks */,
+				CDE7C3252E7DB4F900430822 /* FirebaseMessaging in Frameworks */,
 				CDCFB5612E79FA70007914FC /* GoogleSignIn in Frameworks */,
 				CDCFB5632E79FA70007914FC /* GoogleSignInSwift in Frameworks */,
 			);
@@ -57,6 +59,7 @@
 			isa = PBXGroup;
 			children = (
 				CD753B9E2E769D2D00413C15 /* MoneyMate */,
+				CDE7C3232E7DB4F900430822 /* Frameworks */,
 				CD753B9D2E769D2D00413C15 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -67,6 +70,13 @@
 				CD753B9C2E769D2D00413C15 /* MoneyMate.app */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		CDE7C3232E7DB4F900430822 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -93,6 +103,7 @@
 				CDCFB40B2E79F607007914FC /* FirebaseFirestore */,
 				CDCFB5602E79FA70007914FC /* GoogleSignIn */,
 				CDCFB5622E79FA70007914FC /* GoogleSignInSwift */,
+				CDE7C3242E7DB4F900430822 /* FirebaseMessaging */,
 			);
 			productName = MoneyMate;
 			productReference = CD753B9C2E769D2D00413C15 /* MoneyMate.app */;
@@ -406,6 +417,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = CDCFB55F2E79FA70007914FC /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */;
 			productName = GoogleSignInSwift;
+		};
+		CDE7C3242E7DB4F900430822 /* FirebaseMessaging */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = CDCFB4082E79F607007914FC /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseMessaging;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
