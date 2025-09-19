@@ -5,73 +5,94 @@
 //  Created by Karan Kumar on 18/09/25.
 //
 
-
 import SwiftUI
 import SwiftData
+import Charts
+
 struct AnalyticDetail: View {
     @Environment(\.modelContext) private var context
-      @State private var goToTransactionDetail: Bool = false
-      @State private var selectedTransaction: Transaction?
+    @State private var selectedTransaction: Transaction?
 
-      @Binding var selectedCategoryID: UUID?
+    @Binding var selectedCategoryID: UUID?
 
-      @Query(sort: \Transaction.date, order: .reverse) var allTransactions: [Transaction]
+    @Query(sort: \Transaction.date, order: .reverse) var allTransactions: [Transaction]
+    @Query(sort: \Category.name, order: .forward) var categories: [Category]
 
-      // Filtered transactions based on selectedCategoryID
-      var transactions: [Transaction] {
-          guard let catID = selectedCategoryID else { return [] }
-          return allTransactions.filter { $0.category?.id == catID }
-      }
+    // Filtered transactions
+    var transactions: [Transaction] {
+        guard let catID = selectedCategoryID else { return [] }
+        return allTransactions.filter { $0.category?.id == catID }
+    }
 
-     
+    // Get category name
+    var categoryName: String {
+        guard let catID = selectedCategoryID else { return "Category" }
+        return categories.first(where: { $0.id == catID })?.name ?? "Category"
+    }
+
     var body: some View {
-        ZStack {
-            // Full screen gray background
-            Color(red: 246/255, green: 246/255, blue: 246/255)
-                .ignoresSafeArea()
+        NavigationStack {
+            ZStack {
+                Color(red: 246/255, green: 246/255, blue: 246/255)
+                    .ignoresSafeArea()
 
-            ScrollView(.vertical, showsIndicators: false) {
-                VStack(spacing: 12) {
-                    ForEach(transactions){ tx in
+                ScrollView(.vertical, showsIndicators: false) {
+                    VStack(spacing: 20) {
                         
-                        TransactionRow(transaction: tx, goToTransactionDetail: $goToTransactionDetail, selectedTransactions: $selectedTransaction)
-                        
+                        // MARK: - Chart: Date vs Amount
+                        if !transactions.isEmpty {
+                            Chart(transactions) { tx in
+                                BarMark(
+                                    x: .value("Date", tx.date),
+                                    y: .value("Amount", tx.amount)
+                                )
+                                .foregroundStyle(tx.type == "income" ? .green : .red)
+                                .symbol(Circle())
+                                .interpolationMethod(.catmullRom)
+                            }
+                            .frame(height: 240)
+                            .padding()
+                            .background(Color.white)
+                            .clipShape(RoundedRectangle(cornerRadius: 16))
+                           
+                        }
+
+                        // MARK: - List of Transactions
+                        VStack(alignment: .leading, spacing: 12) {
+                            ForEach(transactions) { tx in
+                                Button {
+                                    selectedTransaction = tx
+                                } label: {
+                                    HStack {
+                                        Text(tx.date.formatted(date: .abbreviated, time: .omitted))
+                                            .font(.subheadline)
+                                            .foregroundColor(.gray)
+
+                                        Spacer()
+
+                                        Text("₹\(tx.amount, specifier: "%.2f")")
+                                            .font(.headline)
+                                            .foregroundColor(tx.type == "income" ? .green : .red)
+                                    }
+                                    .padding()
+                                    .background(Color.white)
+                                    .clipShape(RoundedRectangle(cornerRadius: 10))
+                                    
+                                }
+                            }
+                        }
+                       
                     }
-                }
-                .padding()
+                    .padding(.top)
+                }.padding(20)
+                .navigationTitle(categoryName) // Dynamic title = category name
+                .navigationBarTitleDisplayMode(.inline)
             }
-          
-            .sheet(item: $selectedTransaction){ tx in
-                
+            .sheet(item: $selectedTransaction) { tx in
                 NavigationStack {
                     TransactionDetail(transaction: tx)
                 }
             }
         }
     }
-   
-
 }
-
-private struct TransactionRow: View {
-    var transaction: Transaction
-    @Binding var goToTransactionDetail: Bool
-    @Binding var selectedTransactions: Transaction?
-   
-    var body: some View {
-        Button {
-           
-            selectedTransactions = transaction
-        } label: {
-            HStack(spacing: 12) {
-                CategoryIcon(transaction: transaction)
-                TransactionInfo(transaction: transaction)
-                Spacer()
-                TransactionAmount(amount: transaction.amount)
-            }
-            .foregroundStyle(Color.black)
-            .padding(.vertical, 8)
-        }
-    }
-}
-
