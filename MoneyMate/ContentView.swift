@@ -77,7 +77,7 @@ func seedDefaultCategory(context: ModelContext) async {
     let defaultCategories: [Category] = [
         Category(name: "Food", iconName: "food", red: 1.0, green: 0.6, blue: 0.0),
         Category(name: "Transport", iconName: "transport", red: 0.6, green: 0.3, blue: 0.0),
-        Category(name: "Salary", iconName: "salary", red: 0.5, green: 0.0, blue: 0.5)
+        Category(name: "Salary", iconName: "money", red: 0.5, green: 0.0, blue: 0.5)
     ]
 
     for cat in defaultCategories {

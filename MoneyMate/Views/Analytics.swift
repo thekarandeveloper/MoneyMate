@@ -70,7 +70,6 @@ struct AnalyticsView: View {
                         }
                     }
                     .pickerStyle(.segmented)
-                    .frame(width: .infinity)
                 }
                 .padding(.vertical, 8)
                 
@@ -105,19 +104,23 @@ struct AnalyticsView: View {
                             .overlay(
                                 VStack(alignment: .leading) {
                                     HStack {
-                                        Image(systemName: row.category.iconName)
-                                            .font(.system(size: 20, weight: .bold))
-                                            .frame(width: 15, height: 15)
-                                            .padding(10)
-                                            .background(Color.gray.opacity(0.3))
+                                        Image(row.category.iconName)
+                                            .resizable()
+                                            .scaledToFit()
+                                            .frame(width: 30, height: 30)
+                                            .padding(.vertical,10)
+                                            .padding(.leading, 0)
+//                                            .background(Color.gray.opacity(0.3))
                                             .clipShape(RoundedRectangle(cornerRadius: 12))
                                         Spacer()
                                         Image(systemName: "chevron.right")
                                     }
                                     Spacer()
+                                    
                                     Text(row.category.name).font(.headline)
                                     Text("$\(row.total, specifier: "%.2f")").font(.caption)
                                 }
+                                .foregroundStyle(Color.black)
                                 .padding(10)
                             )
                     }
@@ -138,4 +141,7 @@ struct AnalyticsView: View {
         }
       
     }
+}
+#Preview{
+    AnalyticsView()
 }
