@@ -23,11 +23,15 @@ class AppDelegate: NSObject, UIApplicationDelegate {
 @main
 struct MoneyMateApp: App {
     
+    @StateObject private var themeManager = ThemeManager()
+    
     @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
     var body: some Scene {
         WindowGroup {
+          
             RootView()
-            
+                .environmentObject(themeManager)
+                .preferredColorScheme(themeManager.isDarkMode ? .dark : .light)
         }.modelContainer(for: [User.self, Transaction.self, Category.self, Goal.self])
     }
     

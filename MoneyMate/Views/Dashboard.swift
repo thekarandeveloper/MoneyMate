@@ -132,7 +132,7 @@ struct DashboardView: View{
         
         .padding(20)
         .padding(.bottom, 50)
-        .background(Color(red: 246/255, green: 246/255, blue: 246/255))
+        .background(Color("backgroundColor"))
         
         // Navigation Sheets
         

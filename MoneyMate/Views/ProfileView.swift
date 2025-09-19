@@ -23,7 +23,7 @@ struct ProfileView: View{
                 logout()
             }.padding()
         }.padding(20)
-        .background(Color(red: 246/255, green: 246/255, blue: 246/255))
+        .background(Color("backgroundColor"))
         
         .navigationTitle("Profile")
         .navigationBarTitleDisplayMode(.inline)

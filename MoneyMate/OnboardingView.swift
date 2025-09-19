@@ -32,7 +32,8 @@ struct OnboardingView: View {
     var body: some View {
         
         ZStack{
-            Color(red: 246/255, green: 246/255, blue: 246/255).ignoresSafeArea()
+            Color("backgroundColor")
+                .ignoresSafeArea()
             VStack {
                
                 Spacer().frame(maxHeight: 30)
@@ -66,7 +67,7 @@ struct OnboardingView: View {
                            
                         }
                         .tag(index)
-                        .background(Color(red: 246/255, green: 246/255, blue: 246/255))
+                        .background(Color("backgroundColor")).ignoresSafeArea()
                         
                     }
                 }

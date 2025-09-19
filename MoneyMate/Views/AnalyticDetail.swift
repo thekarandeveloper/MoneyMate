@@ -33,7 +33,7 @@ struct AnalyticDetail: View {
     var body: some View {
         NavigationStack {
             ZStack {
-                Color(red: 246/255, green: 246/255, blue: 246/255)
+                Color("backgroundColor")
                     .ignoresSafeArea()
 
                 ScrollView(.vertical, showsIndicators: false) {

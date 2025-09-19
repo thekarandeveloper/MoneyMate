@@ -33,7 +33,7 @@ struct ContentView: View {
                 case .goals:
                     NavigationStack{SettingsView()}
                 }
-            }.edgesIgnoringSafeArea(.all).background(Color(red: 246/255, green: 246/255, blue: 246/255))
+            }.edgesIgnoringSafeArea(.all).background(Color("backgroundColor"))
             VStack {
                             Spacer()
                             HStack {
