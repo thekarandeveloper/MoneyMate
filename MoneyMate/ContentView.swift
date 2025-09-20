@@ -11,7 +11,7 @@ struct ContentView: View {
     
     @State private var selectedTab: Tab = .dashboard
     @State private var showAddScreen = false
-    @Environment(\.modelContext) private var context
+    @MainActor @Environment(\.modelContext) private var context
    
     @Query(sort: \Category.name) var categories: [Category]
     var body: some View {
@@ -86,9 +86,7 @@ func seedDefaultCategory(context: ModelContext) async {
         }
     }
 
-    await MainActor.run{
-        try? context.save() 
-    }
+    try? context.save()
     
    
 }

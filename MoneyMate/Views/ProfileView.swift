@@ -11,7 +11,8 @@ import SwiftData
 struct ProfileView: View{
     
     @Environment(\.dismiss) private var dismiss
-    
+    @Environment(\.modelContext) private var context
+   
     var body: some View{
      
         VStack {
@@ -36,13 +37,39 @@ struct ProfileView: View{
         }
         
     }
-    func logout(){
-        do{
-            try Auth.auth().signOut()
-            print("User Logged Out")
+    func logout() {
+        Task { @MainActor in
+            // Sign out from Firebase Auth
+            do {
+                try Auth.auth().signOut()
+                print(" User Logged Out from Firebase")
+            } catch let error as NSError {
+                print("❌ Error signing out: \(error.localizedDescription)")
+            }
             
-        } catch let error as NSError {
-            print("Error Siggning out \(error.localizedDescription)")
+            // Clear SwiftData (local persistence)
+            
+            let fetchRequest = FetchDescriptor<User>()
+            do {
+                let users = try context.fetch(fetchRequest)
+                for user in users {
+                    context.delete(user)
+                }
+                try context.save()
+                print("SwiftData cleared")
+            } catch {
+                print("❌ Error clearing SwiftData: \(error)")
+            }
+            
+            // Clear AppStorage / UserDefaults
+            UserDefaults.standard.removeObject(forKey: "selectedCurrency")
+            UserDefaults.standard.removeObject(forKey: "isDarkMode")
+            UserDefaults.standard.removeObject(forKey: "notificationsEnabled")
+            print("AppStorage cleared")
+            
+         
+            // Update UI
+//            isAuthenticated = false
         }
     }
 }
