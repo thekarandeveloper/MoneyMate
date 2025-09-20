@@ -66,7 +66,7 @@ struct avatarView: View{
                    Circle()
                         .fill(Color("secondaryBackground"))
                         .frame(width: 100, height: 100)
-                        .shadow(color: .black.opacity(0.1), radius: 3, x: 0, y: 2)
+                      
 
                     Image(systemName: "person.fill")
                         .font(.system(size: 34, weight: .medium))
@@ -110,7 +110,7 @@ struct ProfileDetails: View {
                 ForEach(personalInfo, id: \.0) { item in
                     HStack {
                         Text(item.0)
-                            .foregroundColor(Color("secondaryText"))
+                            .foregroundColor(Color("Text"))
                         Spacer()
                         Text(item.1)
                             .foregroundColor(Color("Text"))
@@ -151,8 +151,4 @@ struct LogoutButton: View {
     
    
     
-}
-
-#Preview{
-    ProfileView()
 }
