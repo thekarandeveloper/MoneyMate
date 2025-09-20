@@ -2,8 +2,6 @@
 //  AnalyticDetail.swift
 //  MoneyMate
 //
-//  Created by Karan Kumar on 18/09/25.
-//
 
 import SwiftUI
 import SwiftData
@@ -18,16 +16,31 @@ struct AnalyticDetail: View {
     @Query(sort: \Transaction.date, order: .reverse) var allTransactions: [Transaction]
     @Query(sort: \Category.name, order: .forward) var categories: [Category]
 
-    // Filtered transactions
+    // Filtered transactions for this category
     var transactions: [Transaction] {
         guard let catID = selectedCategoryID else { return [] }
         return allTransactions.filter { $0.category?.id == catID }
     }
 
-    // Get category name
+    // Dynamic category name for navigation title
     var categoryName: String {
         guard let catID = selectedCategoryID else { return "Category" }
         return categories.first(where: { $0.id == catID })?.name ?? "Category"
+    }
+
+    // Generate all dates of current month
+    var daysInMonth:  [Date] {
+        let calendar = Calendar.current
+        let today = calendar.startOfDay(for: Date())
+        
+        var dates: [Date] = []
+        for i in 0..<7 {
+            if let day = calendar.date(byAdding: .day, value: -i, to: today) {
+                dates.append(day)
+            }
+        }
+        
+        return dates.reversed() // Optional: earliest day first
     }
 
     var body: some View {
@@ -38,26 +51,41 @@ struct AnalyticDetail: View {
 
                 ScrollView(.vertical, showsIndicators: false) {
                     VStack(spacing: 20) {
-                        
-                        // MARK: - Chart: Date vs Amount
+
+                        // MARK: - Chart
                         if !transactions.isEmpty {
                             Chart(transactions) { tx in
                                 BarMark(
-                                    x: .value("Date", tx.date),
+                                    x: .value("Day", Calendar.current.startOfDay(for: tx.date)),
                                     y: .value("Amount", tx.amount)
                                 )
                                 .foregroundStyle(tx.type == "income" ? .green : .red)
-                                .symbol(Circle())
-                                .interpolationMethod(.catmullRom)
                             }
-                            .frame(height: 240)
+                            .chartXAxis {
+                                AxisMarks(values: daysInMonth) { value in
+                                    AxisGridLine()
+                                    AxisTick()
+                                    AxisValueLabel() {
+                                        if let date = value.as(Date.self) {
+                                            Text(date.formatted(.dateTime.day(.defaultDigits)))
+                                        }
+                                    }
+                                }
+                            }
+                            .chartYAxis {
+                                AxisMarks() { value in
+                                    AxisGridLine()
+                                    AxisTick()
+                                    AxisValueLabel()
+                                }
+                            }
+                            .frame(height: 250)
                             .padding()
                             .background(Color("secondaryBackground"))
                             .clipShape(RoundedRectangle(cornerRadius: 16))
-                           
                         }
 
-                        // MARK: - List of Transactions
+                        // MARK: - Transaction List
                         VStack(alignment: .leading, spacing: 12) {
                             ForEach(transactions) { tx in
                                 Button {
@@ -67,9 +95,7 @@ struct AnalyticDetail: View {
                                         Text(tx.date.formatted(date: .abbreviated, time: .omitted))
                                             .font(.subheadline)
                                             .foregroundColor(Color("secondaryText"))
-
                                         Spacer()
-
                                         Text("₹\(tx.amount, specifier: "%.2f")")
                                             .font(.headline)
                                             .foregroundColor(tx.type == "income" ? .green : .red)
@@ -77,17 +103,17 @@ struct AnalyticDetail: View {
                                     .padding()
                                     .background(Color("secondaryBackground"))
                                     .clipShape(RoundedRectangle(cornerRadius: 10))
-                                    
                                 }
                             }
                         }
-                       
+
                     }
                     .padding(.top)
-                }.padding(20)
-                .navigationTitle(categoryName) // Dynamic title = category name
-                .navigationBarTitleDisplayMode(.inline)
+                    .padding(.horizontal)
+                }
             }
+            .navigationTitle(categoryName)
+            .navigationBarTitleDisplayMode(.large)
             .sheet(item: $selectedTransaction) { tx in
                 NavigationStack {
                     TransactionDetail(transaction: tx)
@@ -95,4 +121,9 @@ struct AnalyticDetail: View {
             }
         }
     }
+}
+
+#Preview {
+    // Example usage with dummy binding
+    AnalyticDetail(selectedCategoryID: .constant(UUID()))
 }

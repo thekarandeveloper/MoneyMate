@@ -23,12 +23,12 @@ struct TransactionDetail: View {
                             VStack(alignment: .center, spacing: 10){
                                 
                                 Circle()
-                                    .fill(Color.pink.opacity(0.1)) // background directly circle ke andar
                                     .frame(width: 80, height: 80)
                                     .overlay(
-                                        Image(systemName: "heart")
-                                            .font(.system(size: 30, weight: .bold))
-                                            .foregroundColor(.pink)
+                                        Image("\(transaction.category?.iconName ?? "coin")")
+                                            .resizable()
+                                            .frame(width: 70, height: 70)
+                                           
                                     )
                                 Text("\(transaction.amount, specifier:"%.2f")")
                                     .font(.system(size: 60, weight: .bold))
@@ -130,7 +130,7 @@ struct TransactionDetail: View {
                                 } label: {
                                     
                                     RoundedRectangle(cornerRadius: 30, style: .continuous)
-                                        .frame(maxWidth: .infinity, maxHeight: 60).overlay(
+                                        .frame(maxWidth: .infinity, maxHeight: 70).overlay(
                                             Text("Edit Transaction")
                                                 .foregroundColor(.white)
                                         )
@@ -144,7 +144,7 @@ struct TransactionDetail: View {
                             
                             
                         }
-                        .padding(20)
+                        
                     }
                     .padding(20)
                 }

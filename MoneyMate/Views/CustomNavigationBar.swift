@@ -33,8 +33,8 @@ struct CustomNavigationBarView: View {
                         }
                         
                         VStack(alignment: .leading) {
-                            Text("Hi, \(user.first?.name ?? "User")").font(.headline).foregroundStyle(Color("text"))
-                            Text("Welcome Back").font(.caption).foregroundStyle(Color("text"))
+                            Text("Hi, \(user.first?.name ?? "User")").font(.headline).foregroundStyle(Color("Text"))
+                            Text("Welcome Back").font(.caption).foregroundStyle(Color("Text"))
                         }
                     }
                 }

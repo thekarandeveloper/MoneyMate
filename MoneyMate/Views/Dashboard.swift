@@ -131,7 +131,7 @@ struct DashboardView: View{
         }
         
         .padding(20)
-        .padding(.bottom, 50)
+        .padding(.bottom, 200)
         .background(Color("backgroundColor"))
         
         // Navigation Sheets
@@ -219,7 +219,3 @@ struct TransactionAmount: View {
         }
     }
 }
-
-//#Preview {
-//    DashboardView()
-//}

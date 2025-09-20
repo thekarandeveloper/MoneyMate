@@ -54,7 +54,7 @@ struct avatarView: View{
            if let firstUser = user.first {
                return firstUser
            } else {
-               // Return a placeholder/default User if none exists
+              
                return User(id: "0", name: "User Name", email: "example@example.com", lastUpdated: Date())
            }
        }
@@ -62,11 +62,16 @@ struct avatarView: View{
         
        
             VStack(spacing: 20){
-                Image("Mark")
-                    .resizable()
-                    .frame(width: 100, height: 100)
-                    .clipShape(Circle())
-                    .scaledToFill()
+                ZStack{
+                   Circle()
+                        .fill(Color("secondaryBackground"))
+                        .frame(width: 100, height: 100)
+                        .shadow(color: .black.opacity(0.1), radius: 3, x: 0, y: 2)
+
+                    Image(systemName: "person.fill")
+                        .font(.system(size: 34, weight: .medium))
+                        .foregroundColor(.blue)
+                }
                 
                 VStack {
                     Text("\(personalInfo.name)")
@@ -104,23 +109,23 @@ struct ProfileDetails: View {
             Section(header: Text("Personal Info").font(.headline)) {
                 ForEach(personalInfo, id: \.0) { item in
                     HStack {
-                        Text(item.0) // Question / Label
+                        Text(item.0)
                             .foregroundColor(Color("secondaryText"))
                         Spacer()
-                        Text(item.1) // Answer / Value
-                            .foregroundColor(.black)
+                        Text(item.1)
+                            .foregroundColor(Color("Text"))
                             .fontWeight(.semibold)
                     }
                     .padding(.vertical, 8)
-                    .background(Color("secondaryBackground"))
-                    .cornerRadius(8)
-                }
+                    .listRowBackground(Color("secondaryBackground")) // ← THIS!
+                }.background(Color("secondaryBackground"))
             }
 
         }
         .listStyle(.insetGrouped)
-        .scrollContentBackground(.hidden) // hide default list background
         
+        .scrollContentBackground(.hidden) // hide default list background
+       
     }
 }
 
@@ -139,7 +144,7 @@ struct LogoutButton: View {
             }
             .padding()
             .frame(maxWidth: .infinity)
-            .background(Color(red: 1, green: 0.9, blue: 0.9))
+            .background(Color("secondaryBackground"))
             .cornerRadius(12)
         }
     }
