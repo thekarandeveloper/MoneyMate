@@ -27,8 +27,11 @@ class FirestoreManager {
             
             
             // Save Locally
-            context.insert(model)
-            try? context.save()
+           
+            await MainActor.run {
+                context.insert(model)
+                try? context.save()
+            }
         } catch {
             print("Error saving: \(error.localizedDescription)")
         }
@@ -46,8 +49,11 @@ class FirestoreManager {
             
             
             // Save Locally
-            models.forEach{context.insert($0)}
-            try? context.save()
+            await MainActor.run{
+                models.forEach{context.insert($0)}
+                try? context.save()
+            }
+            
             return models
         } catch {
             print("Error fetching: \(error.localizedDescription)")
@@ -58,8 +64,12 @@ class FirestoreManager {
         func delete<T: FirestoreModel & PersistentModel>(_ model: T, from collection: String, context: ModelContext) async {
             do {
                 try await db.collection(collection).document(model.id).delete()
-                context.delete(model)
-                try? context.save()
+                
+                await MainActor.run{
+                    context.delete(model)
+                    try? context.save()
+                }
+               
             } catch {
                 print("❌ Error deleting: \(error.localizedDescription)")
             }

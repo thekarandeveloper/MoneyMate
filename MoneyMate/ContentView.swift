@@ -86,7 +86,11 @@ func seedDefaultCategory(context: ModelContext) async {
         }
     }
 
-    try? context.save() // <-- important for @Query to pick up
+    await MainActor.run{
+        try? context.save() 
+    }
+    
+   
 }
 
 #Preview {
