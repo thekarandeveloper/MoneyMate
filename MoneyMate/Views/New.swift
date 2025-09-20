@@ -77,14 +77,6 @@ struct NewEntryView: View {
         .navigationBarTitleDisplayMode(.inline)
         .toolbar{
             
-            // Left Button
-            ToolbarItem(placement: .cancellationAction){
-                Button("Cancel"){
-                   dismiss()
-                }
-               
-            }
-            
             // Right Button
             ToolbarItem(placement: .confirmationAction){
                 Button("Save"){

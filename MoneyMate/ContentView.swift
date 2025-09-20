@@ -13,7 +13,7 @@ struct ContentView: View {
     @State private var showAddScreen = false
     @State private var transactionToEdit: Transaction? = nil
     @Environment(\.modelContext) private var context
-   
+    @Environment(\.dismiss) private var dismiss
     @Query(sort: \Category.name) var categories: [Category]
     var body: some View {
         
@@ -62,7 +62,14 @@ struct ContentView: View {
         .sheet(isPresented: $showAddScreen){
             NavigationStack{
                 NewEntryView(transactionToEdit: $transactionToEdit)
-                    
+                    .toolbar{
+                        // Left Bar Iteam
+                        ToolbarItem(placement: .cancellationAction){
+                            Button("Back"){
+                                dismiss()
+                            }
+                        }
+                    }
             }
         }.task {
             await seedDefaultCategory(context: context)

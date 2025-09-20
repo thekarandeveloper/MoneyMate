@@ -116,7 +116,7 @@ struct AnalyticDetail: View {
             .navigationBarTitleDisplayMode(.large)
             .sheet(item: $selectedTransaction) { tx in
                 NavigationStack {
-                    TransactionDetail(transaction: tx)
+                    TransactionDetail(transactionID: tx.id)
                 }
             }
         }

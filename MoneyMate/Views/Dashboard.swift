@@ -145,7 +145,7 @@ struct DashboardView: View{
         .sheet(item: $selectedTransactions){ tx in
            
             NavigationStack {
-                TransactionDetail(transaction: tx)
+                TransactionDetail(transactionID: tx.id)
             }
         }
         
