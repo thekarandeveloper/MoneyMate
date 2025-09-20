@@ -47,7 +47,7 @@ struct AnalyticsView: View {
                 .filter { filterTransactions.contains($0) && $0.type == "expense" }
                 .map(\.amount)
                 .reduce(0,+)
-            return CategoryTotal(id: category.id ?? UUID(), category: category, total: totalAmount)
+            return CategoryTotal(id: category.id, category: category, total: totalAmount)
         }
         
         var categoryRows: [CategoryRowData] {

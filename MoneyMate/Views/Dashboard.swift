@@ -61,7 +61,7 @@ struct DashboardView: View{
                 .filter { filterTransactions.contains($0) && $0.type == "expense" }
                 .map(\.amount)
                 .reduce(0,+)
-            return CategoryTotal(id: category.id ?? UUID(), category: category, total: totalAmount)
+            return CategoryTotal(id: category.id, category: category, total: totalAmount)
         }
         
        
@@ -127,11 +127,11 @@ struct DashboardView: View{
                                    goToTransactionDetail: $goToTransactionDetail,
                                    selectedTransactions: $selectedTransactions)
                 }
-            }
+            } .padding(.bottom, 50)
         }
         
         .padding(20)
-        .padding(.bottom, 200)
+        .padding(.bottom, 50)
         .background(Color("backgroundColor"))
         
         // Navigation Sheets

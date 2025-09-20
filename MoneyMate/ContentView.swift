@@ -86,7 +86,7 @@ func seedDefaultCategory(context: ModelContext) async {
         }
     }
 
-    try? await context.save() // <-- important for @Query to pick up
+    try? context.save() // <-- important for @Query to pick up
 }
 
 #Preview {
