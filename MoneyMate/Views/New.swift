@@ -80,7 +80,7 @@ struct NewEntryView: View {
                 Button("Cancel"){
                    dismiss()
                 }
-                .foregroundColor(Color("secondaryText"))
+               
             }
             
             // Right Button
@@ -99,7 +99,7 @@ struct NewEntryView: View {
                     
                     dismiss()
                 }
-                .foregroundColor(Color("secondaryText"))
+               
             }
             
         }
