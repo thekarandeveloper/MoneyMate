@@ -28,10 +28,8 @@ class FirestoreManager {
             
             // Save Locally
            
-            await MainActor.run {
-                context.insert(model)
-                try? context.save()
-            }
+            context.insert(model)
+            try? context.save()
         } catch {
             print("Error saving: \(error.localizedDescription)")
         }
@@ -49,10 +47,8 @@ class FirestoreManager {
             
             
             // Save Locally
-            await MainActor.run{
-                models.forEach{context.insert($0)}
-                try? context.save()
-            }
+            models.forEach{context.insert($0)}
+            try? context.save()
             
             return models
         } catch {
@@ -65,10 +61,8 @@ class FirestoreManager {
             do {
                 try await db.collection(collection).document(model.id).delete()
                 
-                await MainActor.run{
-                    context.delete(model)
-                    try? context.save()
-                }
+                context.delete(model)
+                try? context.save()
                
             } catch {
                 print("❌ Error deleting: \(error.localizedDescription)")

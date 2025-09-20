@@ -62,7 +62,7 @@ class Transaction: FirestoreModel, Identifiable, Codable {
     var lastUpdated: Date
     var isSynced: Bool
     // Only store categoryId in Firestore (not full Category relationship)
-    var categoryId: String?
+    var categoryId: Int?
     @Relationship(deleteRule: .nullify) var category: Category?
 
     init(
@@ -83,7 +83,7 @@ class Transaction: FirestoreModel, Identifiable, Codable {
         self.note = note
         self.type = type
         self.category = category
-        self.categoryId = category?.id.uuidString
+        self.categoryId = category?.id
         self.lastUpdated = lastUpdated
         self.isSynced = isSynced
     }
@@ -104,7 +104,7 @@ class Transaction: FirestoreModel, Identifiable, Codable {
         type = try container.decode(String.self, forKey: .type)
         lastUpdated = try container.decode(Date.self, forKey: .lastUpdated)
         isSynced = try container.decode(Bool.self, forKey: .isSynced)
-        categoryId = try container.decodeIfPresent(String.self, forKey: .categoryId)
+        categoryId = try container.decodeIfPresent(Int.self, forKey: .categoryId)
     }
 
     func encode(to encoder: Encoder) throws {
@@ -124,7 +124,7 @@ class Transaction: FirestoreModel, Identifiable, Codable {
 
 @Model
 class Category: Identifiable, Hashable {
-    @Attribute(.unique) var id: UUID = UUID()
+    @Attribute(.unique) var id: Int
     var name: String
     var iconName: String
     
@@ -140,7 +140,8 @@ class Category: Identifiable, Hashable {
         Color(red: red, green: green, blue: blue)
     }
     
-    init(name: String, iconName: String, red: Double, green: Double, blue: Double) {
+    init(id: Int, name: String, iconName: String, red: Double, green: Double, blue: Double) {
+        self.id = id
         self.name = name
         self.iconName = iconName
         self.red = red
@@ -186,19 +187,19 @@ struct Expense: Identifiable {
 
 
 struct CategoryItem: Hashable {
-    let id = UUID()
+    let id: Int
     let name: String
     let iconName: String
     let color: Color
 }
 
 struct CategoryTotal: Identifiable {
-    let id: UUID
+    let id: Int
     let category: Category
     let total: Double
 }
 struct CategoryRowData: Identifiable {
-    let id = UUID()
+    let id: Int
     let category: Category
     let total: Double
 }

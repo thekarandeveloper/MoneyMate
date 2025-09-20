@@ -11,7 +11,7 @@ import SwiftData
 struct AnalyticsView: View {
     
     @State private var selected = 0
-    @State private var selectedCategoryID:UUID? = nil
+    @State private var selectedCategoryID:Int? = nil
     let durationOptions = ["Week", "Month", "Year"]
     
     // Swift Data
@@ -53,7 +53,7 @@ struct AnalyticsView: View {
         var categoryRows: [CategoryRowData] {
             categories.map { category in
                 let total = categoryTotals.first(where: { $0.category.id == category.id })?.total ?? 0
-                return CategoryRowData(category: category, total: total)
+                return CategoryRowData(id: category.id, category: category, total: total)
             }
         }
         ScrollView(.vertical, showsIndicators: false) {

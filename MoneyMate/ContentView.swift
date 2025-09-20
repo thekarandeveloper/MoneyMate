@@ -11,7 +11,7 @@ struct ContentView: View {
     
     @State private var selectedTab: Tab = .dashboard
     @State private var showAddScreen = false
-    @MainActor @Environment(\.modelContext) private var context
+    @Environment(\.modelContext) private var context
    
     @Query(sort: \Category.name) var categories: [Category]
     var body: some View {
@@ -75,9 +75,9 @@ func seedDefaultCategory(context: ModelContext) async {
     let existingCategories = (try? context.fetch(descriptor)) ?? []
 
     let defaultCategories: [Category] = [
-        Category(name: "Food", iconName: "food", red: 1.0, green: 0.6, blue: 0.0),
-        Category(name: "Transport", iconName: "transport", red: 0.6, green: 0.3, blue: 0.0),
-        Category(name: "Salary", iconName: "money", red: 0.5, green: 0.0, blue: 0.5)
+        Category(id:1, name: "Food", iconName: "food", red: 1.0, green: 0.6, blue: 0.0),
+        Category(id:2, name: "Transport", iconName: "transport", red: 0.6, green: 0.3, blue: 0.0),
+        Category(id:3, name: "Salary", iconName: "money", red: 0.5, green: 0.0, blue: 0.5)
     ]
 
     for cat in defaultCategories {
@@ -85,8 +85,8 @@ func seedDefaultCategory(context: ModelContext) async {
             context.insert(cat)
         }
     }
-
-    try? context.save()
+    try? await context.save()
+   
     
    
 }

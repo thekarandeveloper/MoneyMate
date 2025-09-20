@@ -17,7 +17,7 @@ struct NewEntryView: View {
     @State private var newTransactionAmount: String = ""
     @FocusState private var isFocused: Bool
     
-    @Query(sort: \Category.name, order: .forward) var categories:[Category]
+    @Query(sort: \Category.id, order: .forward) var categories:[Category]
     
     let entryType = ["expense", "income"]
     
@@ -61,11 +61,10 @@ struct NewEntryView: View {
             Picker("categorySelection", selection: $categorySelected){
                 ForEach(0..<categories.count, id:\.self){ index in
                     Text(categories[index].name)
-                        .foregroundColor(Color("Text"))
+                       
                 }
             }
             .pickerStyle(.menu)
-            .accentColor(Color("secondaryColor"))
             
             Spacer()
             

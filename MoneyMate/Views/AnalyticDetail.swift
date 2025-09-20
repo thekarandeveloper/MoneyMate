@@ -11,7 +11,7 @@ struct AnalyticDetail: View {
     @Environment(\.modelContext) private var context
     @State private var selectedTransaction: Transaction?
 
-    @Binding var selectedCategoryID: UUID?
+    @Binding var selectedCategoryID: Int?
 
     @Query(sort: \Transaction.date, order: .reverse) var allTransactions: [Transaction]
     @Query(sort: \Category.name, order: .forward) var categories: [Category]
@@ -121,9 +121,4 @@ struct AnalyticDetail: View {
             }
         }
     }
-}
-
-#Preview {
-    // Example usage with dummy binding
-    AnalyticDetail(selectedCategoryID: .constant(UUID()))
 }
