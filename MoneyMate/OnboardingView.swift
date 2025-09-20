@@ -239,7 +239,7 @@ struct OnboardingView: View {
                 let email = user.email ?? credential.email ?? "Unknown"
                 let fullName = credential.fullName?.givenName ?? user.displayName ?? "User"
 
-                print("Firebase Apple Sign-In success, uid=\(uid)")
+                print("Firebase Apple Sign-In success, uid=\(uid)", fullName)
 
                 Task {
                     await createUser(id: uid, name: fullName, email: email)

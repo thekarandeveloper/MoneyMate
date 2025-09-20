@@ -66,6 +66,7 @@ class Transaction: FirestoreModel, Identifiable, Codable {
     @Relationship(deleteRule: .nullify) var category: Category?
 
     init(
+        id:String = UUID().uuidString,
         userID: String,
         amount: Double,
          date: Date = Date(),
@@ -76,7 +77,7 @@ class Transaction: FirestoreModel, Identifiable, Codable {
          isSynced: Bool = false) {
         
              
-        self.id = UUID().uuidString
+        self.id = id
         self.userID = userID
         self.amount = amount
         self.date = date

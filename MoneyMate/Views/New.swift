@@ -10,6 +10,8 @@ import SwiftData
 import FirebaseAuth
 
 struct NewEntryView: View {
+    @Binding var transactionToEdit: Transaction?
+
     @Environment(\.modelContext) private var context
     @Environment(\.dismiss) private var dismiss
     @State private var entrySelected = 0
@@ -87,6 +89,7 @@ struct NewEntryView: View {
             ToolbarItem(placement: .confirmationAction){
                 Button("Save"){
                     let newTx = Transaction(
+                        id:transactionToEdit?.id ?? UUID().uuidString,
                         userID: Auth.auth().currentUser?.uid ?? "unknownUserID",
                         amount: Double(newTransactionAmount) ?? 0.0,
                         type: entryType[entrySelected],
@@ -95,6 +98,8 @@ struct NewEntryView: View {
                     
                     Task{
                         await FirestoreManager.shared.save(newTx, in: "transactions", context: context)
+                       
+                      
                     }
                     
                     dismiss()
@@ -103,10 +108,21 @@ struct NewEntryView: View {
             }
             
         }
-        .onAppear{
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1){
-                isFocused = true
-            }
-        }
+        
+        .onAppear {
+                  DispatchQueue.main.asyncAfter(deadline: .now() + 0.1){
+                      isFocused = true
+                      
+                      // Prefill values if editing an existing transaction
+                      if let tx = transactionToEdit {
+                          newTransactionAmount = "\(tx.amount)"
+                          entrySelected = entryType.firstIndex(of: tx.type) ?? 0
+                          if let cat = tx.category,
+                             let index = categories.firstIndex(where: { $0.id == cat.id }) {
+                              categorySelected = index
+                          }
+                      }
+                  }
+              }
     }
 }

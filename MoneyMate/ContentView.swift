@@ -11,6 +11,7 @@ struct ContentView: View {
     
     @State private var selectedTab: Tab = .dashboard
     @State private var showAddScreen = false
+    @State private var transactionToEdit: Transaction? = nil
     @Environment(\.modelContext) private var context
    
     @Query(sort: \Category.name) var categories: [Category]
@@ -60,7 +61,7 @@ struct ContentView: View {
        
         .sheet(isPresented: $showAddScreen){
             NavigationStack{
-                NewEntryView()
+                NewEntryView(transactionToEdit: $transactionToEdit)
                     
             }
         }.task {

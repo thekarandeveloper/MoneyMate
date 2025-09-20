@@ -143,7 +143,7 @@ struct DashboardView: View{
         }
         
         .sheet(item: $selectedTransactions){ tx in
-            
+           
             NavigationStack {
                 TransactionDetail(transaction: tx)
             }
@@ -166,6 +166,7 @@ private struct TransactionRow: View {
         Button {
            
             selectedTransactions = transaction
+            print(transaction.amount)
         } label: {
             HStack(spacing: 12) {
                 CategoryIcon(transaction: transaction)
