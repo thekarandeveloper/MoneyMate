@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		CD8688122E840F160019FB81 /* readme.md in Resources */ = {isa = PBXBuildFile; fileRef = CD8688112E840F100019FB81 /* readme.md */; };
 		CDCFB40A2E79F607007914FC /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = CDCFB4092E79F607007914FC /* FirebaseAuth */; };
 		CDCFB40C2E79F607007914FC /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = CDCFB40B2E79F607007914FC /* FirebaseFirestore */; };
 		CDCFB5612E79FA70007914FC /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = CDCFB5602E79FA70007914FC /* GoogleSignIn */; };
@@ -16,6 +17,7 @@
 
 /* Begin PBXFileReference section */
 		CD753B9C2E769D2D00413C15 /* MoneyMate.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MoneyMate.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		CD8688112E840F100019FB81 /* readme.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = readme.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -35,6 +37,11 @@
 				CD0148212E7A0068007595FD /* Exceptions for "MoneyMate" folder in "MoneyMate" target */,
 			);
 			path = MoneyMate;
+			sourceTree = "<group>";
+		};
+		CD86880E2E840EDB0019FB81 /* assets */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = assets;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -58,6 +65,8 @@
 		CD753B932E769D2D00413C15 = {
 			isa = PBXGroup;
 			children = (
+				CD8688112E840F100019FB81 /* readme.md */,
+				CD86880E2E840EDB0019FB81 /* assets */,
 				CD753B9E2E769D2D00413C15 /* MoneyMate */,
 				CDE7C3232E7DB4F900430822 /* Frameworks */,
 				CD753B9D2E769D2D00413C15 /* Products */,
@@ -96,6 +105,7 @@
 			);
 			fileSystemSynchronizedGroups = (
 				CD753B9E2E769D2D00413C15 /* MoneyMate */,
+				CD86880E2E840EDB0019FB81 /* assets */,
 			);
 			name = MoneyMate;
 			packageProductDependencies = (
@@ -152,6 +162,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CD8688122E840F160019FB81 /* readme.md in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
