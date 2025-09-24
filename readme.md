@@ -31,7 +31,7 @@ It helps users manage income, expenses, categories, and financial goals in a sim
 ## 📸 Screenshots (App Store Preview)
 | Onboard | Dashboard | Analytics |
 |---------|-----------|-----------|
-| <img src="assets/onboard.png" width="200"/> | <img src="assets/dashboard.png" width="200"/> | <img src="assets/analytics.png" width="200"/> |
+| <img src="assets/onboard.png" width="300"/> | <img src="assets/dashboard.png" width="300"/> | <img src="assets/analytics.png" width="300"/> |
 
 ## 🔮 Future Enhancements
 
